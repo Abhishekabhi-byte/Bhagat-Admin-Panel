@@ -10,9 +10,10 @@ import {
   Users, 
   Map, 
   User, 
-  BriefcaseBusiness, 
-  PhoneCall 
+  BriefcaseBusiness,   
 } from 'lucide-react';
+
+import { PiCertificateFill } from "react-icons/pi";
 
 const sections = [
   { name: "Banner", path: "/banner", icon: Image },
@@ -20,9 +21,9 @@ const sections = [
   { name: "Projects", path: "/project", icon: Briefcase },
   { name: "Client", path: "/client", icon: Users },
   { name: "Journey", path: "/journey", icon: Map },
-  { name: "Team", path: "/team", icon: User },
-  { name: "Services", path: "/services", icon: BriefcaseBusiness },
-  { name: "Contact", path: "/contact", icon: PhoneCall }
+  { name: "logo", path: "/logo", icon: User },
+  { name: "services", path: "/services", icon: BriefcaseBusiness },
+  { name: "certificate", path: "/certificate", icon: PiCertificateFill  }
 ];
 
 export default function sidebar() {
@@ -30,7 +31,7 @@ export default function sidebar() {
 
   return (
     // Custom gradient mimicking the provided image color scheme
-    <aside className="w-64 bg-gradient-to-br from-[#935053] via-[#b67376] to-[#cd9193] text-white flex flex-col h-screen shrink-0 shadow-xl">
+    <aside className="w-64 bg-[#B50508] text-white flex flex-col h-screen shrink-0 shadow-xl">
       
       {/* Sidebar Header Brand */}
       <div className="h-16 flex items-center px-6 border-b border-white/10 bg-[#7a3e41]/30 backdrop-blur-sm">

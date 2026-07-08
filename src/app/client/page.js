@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { 
-  Users, 
+  Building2, 
   Eye, 
   Edit2, 
   Trash2, 
@@ -11,61 +11,66 @@ import {
   X, 
   ChevronLeft, 
   ChevronRight,
-  Search,
-  Building2,
-  User,
-  Briefcase
+  Search
 } from 'lucide-react';
 
-export default function Client() {
-  const [clients, setClients] = useState([
-    {
-      id: 1,
-      companyImage: 'https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=250',
-      description: 'Leading technology solutions provider for enterprise businesses.',
-      clientImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=250',
-      clientName: 'John Doe',
-      clientDesignation: 'CEO, TechCorp'
+export default function FoundationPage() {
+  const [foundations, setFoundations] = useState([
+    { 
+      id: 1, 
+      title: 'Green Earth Foundation', 
+      description: 'A non-profit organization dedicated to environmental conservation and sustainable development.',
+      imageUrl: 'https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=250',
+      createdAt: '2026-07-01',
+      status: 'Active'
     },
-    {
-      id: 2,
-      companyImage: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=250',
-      description: 'Global consulting firm specializing in digital transformation.',
-      clientImage: 'https://images.unsplash.com/photo-1494790108372-be9c29b29330?w=250',
-      clientName: 'Jane Smith',
-      clientDesignation: 'Managing Director, ConsultPro'
+    { 
+      id: 2, 
+      title: 'Education For All', 
+      description: 'Providing quality education to underprivileged children across rural communities.',
+      imageUrl: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=250',
+      createdAt: '2026-07-05',
+      status: 'Active'
     },
-    {
-      id: 3,
-      companyImage: 'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=250',
-      description: 'Innovative fintech startup revolutionizing payment systems.',
-      clientImage: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=250',
-      clientName: 'Michael Johnson',
-      clientDesignation: 'CTO, PayFast'
+    { 
+      id: 3, 
+      title: 'Healthcare Initiative', 
+      description: 'Improving healthcare access and medical facilities in remote areas.',
+      imageUrl: 'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=250',
+      createdAt: '2026-07-06',
+      status: 'Inactive'
     },
-    {
-      id: 4,
-      companyImage: 'https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=250',
-      description: 'E-commerce platform with a focus on sustainable fashion.',
-      clientImage: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=250',
-      clientName: 'Emily Davis',
-      clientDesignation: 'Founder, EcoWear'
+    { 
+      id: 4, 
+      title: 'Women Empowerment Trust', 
+      description: 'Empowering women through skill development, education, and entrepreneurship programs.',
+      imageUrl: 'https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=250',
+      createdAt: '2026-07-07',
+      status: 'Active'
     },
-    {
-      id: 5,
-      companyImage: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=250',
-      description: 'Healthcare technology company improving patient outcomes.',
-      clientImage: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=250',
-      clientName: 'David Lee',
-      clientDesignation: 'CEO, HealthTech'
+    { 
+      id: 5, 
+      title: 'Clean Water Project', 
+      description: 'Providing clean drinking water to communities through sustainable water purification systems.',
+      imageUrl: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=250',
+      createdAt: '2026-07-08',
+      status: 'Active'
     },
-    {
-      id: 6,
-      companyImage: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=250',
-      description: 'EdTech platform offering online courses for professionals.',
-      clientImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=250',
-      clientName: 'Sarah Wilson',
-      clientDesignation: 'Head of Product, LearnHub'
+    { 
+      id: 6, 
+      title: 'Animal Welfare Society', 
+      description: 'Rescue, rehabilitation, and care for abandoned and injured animals.',
+      imageUrl: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=250',
+      createdAt: '2026-07-09',
+      status: 'Inactive'
+    },
+    { 
+      id: 7, 
+      title: 'Digital Literacy Mission', 
+      description: 'Bridging the digital divide by providing technology education and access to digital resources.',
+      imageUrl: 'https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=250',
+      createdAt: '2026-07-10',
+      status: 'Active'
     },
   ]);
 
@@ -73,31 +78,26 @@ export default function Client() {
   const [searchTerm, setSearchTerm] = useState('');
   const itemsPerPage = 5;
 
-  // Form state
-  const [companyImage, setCompanyImage] = useState(null);
-  const [companyPreview, setCompanyPreview] = useState('');
+  const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [clientImage, setClientImage] = useState(null);
-  const [clientPreview, setClientPreview] = useState('');
-  const [clientName, setClientName] = useState('');
-  const [clientDesignation, setClientDesignation] = useState('');
-
+  const [image, setImage] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState('');
+  const [status, setStatus] = useState('Active');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
-  const [viewingClient, setViewingClient] = useState(null);
+  const [viewingFoundation, setViewingFoundation] = useState(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
 
-  // Filter clients based on search
-  const filteredClients = clients.filter(client =>
-    client.clientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    client.clientDesignation.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    client.description.toLowerCase().includes(searchTerm.toLowerCase())
+  // Filter foundations based on search
+  const filteredFoundations = foundations.filter(foundation =>
+    foundation.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    foundation.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const totalPages = Math.ceil(filteredClients.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredFoundations.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentClients = filteredClients.slice(indexOfFirstItem, indexOfLastItem);
+  const currentFoundations = filteredFoundations.slice(indexOfFirstItem, indexOfLastItem);
 
   // Reset to page 1 when search changes
   React.useEffect(() => {
@@ -110,131 +110,125 @@ export default function Client() {
     }
   };
 
-  // Fixed image upload handler
-  const handleImageChange = (e, type) => {
+  const handleImageChange = (e) => {
     const file = e.target.files[0];
-    e.target.value = '';
-
-    if (!file) return;
-
-    if (!file.type.startsWith('image/')) {
-      alert('Please upload a valid image file (JPEG, PNG, GIF, WEBP).');
-      return;
-    }
-
-    if (file.size > 5 * 1024 * 1024) {
-      alert('Image size must be less than 5MB.');
-      return;
-    }
-
-    const url = URL.createObjectURL(file);
-
-    if (type === 'company') {
-      if (companyPreview && !companyPreview.startsWith('http')) {
-        URL.revokeObjectURL(companyPreview);
-      }
-      setCompanyImage(file);
-      setCompanyPreview(url);
-    } else {
-      if (clientPreview && !clientPreview.startsWith('http')) {
-        URL.revokeObjectURL(clientPreview);
-      }
-      setClientImage(file);
-      setClientPreview(url);
+    if (file) {
+      setImage(file);
+      setPreviewUrl(URL.createObjectURL(file));
     }
   };
 
-  const handleCreateClient = (e) => {
+  const handleCreateFoundation = (e) => {
     e.preventDefault();
-    if (!companyPreview) return alert('Please select a company image.');
-    if (!clientPreview) return alert('Please select a client image.');
-    if (!clientName.trim()) return alert('Please enter the client name.');
-    if (!clientDesignation.trim()) return alert('Please enter the client designation.');
+    if (!previewUrl) {
+      alert('Please select an image.');
+      return;
+    }
+    if (!title.trim()) {
+      alert('Please enter a foundation title.');
+      return;
+    }
+    if (!description.trim()) {
+      alert('Please enter a description.');
+      return;
+    }
 
-    const newClient = {
+    const newFoundation = {
       id: Date.now(),
-      companyImage: companyPreview,
+      title: title.trim(),
       description: description.trim(),
-      clientImage: clientPreview,
-      clientName: clientName.trim(),
-      clientDesignation: clientDesignation.trim()
+      imageUrl: previewUrl,
+      status: status,
+      createdAt: new Date().toISOString().split('T')[0]
     };
 
-    setClients([newClient, ...clients]);
+    setFoundations([newFoundation, ...foundations]);
     setCurrentPage(1);
-    
-    clearFormFields();
+    resetForm();
     setIsModalOpen(false);
   };
 
-  const handleEdit = (client) => {
-    setEditingId(client.id);
-    setCompanyPreview(client.companyImage);
-    setDescription(client.description);
-    setClientPreview(client.clientImage);
-    setClientName(client.clientName);
-    setClientDesignation(client.clientDesignation);
+  const handleEdit = (foundation) => {
+    setEditingId(foundation.id);
+    setTitle(foundation.title);
+    setDescription(foundation.description);
+    setPreviewUrl(foundation.imageUrl);
+    setStatus(foundation.status);
     setIsModalOpen(true);
   };
 
-  const handleUpdateClient = (e) => {
+  const handleUpdateFoundation = (e) => {
     e.preventDefault();
-    if (!companyPreview) return alert('Please select a company image.');
-    if (!clientPreview) return alert('Please select a client image.');
-    if (!clientName.trim()) return alert('Please enter the client name.');
-    if (!clientDesignation.trim()) return alert('Please enter the client designation.');
+    if (!previewUrl) {
+      alert('Please select an image.');
+      return;
+    }
+    if (!title.trim()) {
+      alert('Please enter a foundation title.');
+      return;
+    }
+    if (!description.trim()) {
+      alert('Please enter a description.');
+      return;
+    }
 
-    const updatedClients = clients.map(client =>
-      client.id === editingId
-        ? {
-            ...client,
-            companyImage: companyPreview,
+    const updatedFoundations = foundations.map(foundation =>
+      foundation.id === editingId
+        ? { 
+            ...foundation, 
+            title: title.trim(), 
             description: description.trim(),
-            clientImage: clientPreview,
-            clientName: clientName.trim(),
-            clientDesignation: clientDesignation.trim()
+            imageUrl: previewUrl,
+            status: status
           }
-        : client
+        : foundation
     );
 
-    setClients(updatedClients);
-    clearFormFields();
+    setFoundations(updatedFoundations);
+    resetForm();
     setIsModalOpen(false);
     setEditingId(null);
   };
 
   const handleDelete = (id) => {
-    if (confirm('Are you sure you want to delete this client entry?')) {
-      const updatedClients = clients.filter(client => client.id !== id);
-      setClients(updatedClients);
-      const newTotalPages = Math.ceil(updatedClients.length / itemsPerPage);
+    if (confirm('Are you sure you want to delete this foundation entry?')) {
+      const updatedFoundations = foundations.filter(foundation => foundation.id !== id);
+      setFoundations(updatedFoundations);
+      const newTotalPages = Math.ceil(updatedFoundations.length / itemsPerPage);
       if (currentPage > newTotalPages && newTotalPages > 0) {
         setCurrentPage(newTotalPages);
       }
     }
   };
 
-  const handleView = (client) => {
-    setViewingClient(client);
+  const handleView = (foundation) => {
+    setViewingFoundation(foundation);
     setIsViewModalOpen(true);
   };
 
-  const clearFormFields = () => {
-    setCompanyImage(null);
-    setCompanyPreview('');
+  const resetForm = () => {
+    setTitle('');
     setDescription('');
-    setClientImage(null);
-    setClientPreview('');
-    setClientName('');
-    setClientDesignation('');
+    setImage(null);
+    setPreviewUrl('');
+    setStatus('Active');
     setEditingId(null);
   };
 
   const closeModal = () => {
-    if (companyPreview && !companyPreview.startsWith('http')) URL.revokeObjectURL(companyPreview);
-    if (clientPreview && !clientPreview.startsWith('http')) URL.revokeObjectURL(clientPreview);
-    clearFormFields();
     setIsModalOpen(false);
+    resetForm();
+  };
+
+  const getStatusColor = (status) => {
+    switch(status) {
+      case 'Active':
+        return 'bg-emerald-50 text-emerald-700 border-emerald-200';
+      case 'Inactive':
+        return 'bg-amber-50 text-amber-700 border-amber-200';
+      default:
+        return 'bg-gray-50 text-gray-700 border-gray-200';
+    }
   };
 
   const truncateText = (text, maxLength = 60) => {
@@ -244,108 +238,110 @@ export default function Client() {
   };
 
   return (
-    <div className="space-y-5 max-w-7xl mx-auto bg-[#7d3431] py-1 px-1">
+    <div className="space-y-5 bg-red-500 p-6 min-h-screen max-w-7xl mx-auto  shadow-sm">
       
-      {/* Top Controller Bar */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white py-4 px-5 rounded-xl shadow-sm border border-red-200/50">
-        <div>
-          <h2 className="text-lg font-bold text-black">Clients Directory</h2>
-          <p className="text-xs text-black/70">Manage your client testimonials and company profiles.</p>
-        </div>
-        <button 
-          onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#7d3431] to-[#cb8c89] text-white font-medium text-sm rounded-xl hover:shadow-lg hover:shadow-[#7d3431]/20 transition-all duration-300"
-        >
-          <Plus className="w-4 h-4" /> Add New Client
-        </button>
-      </div>
+ 
 
-      {/* Table */}
-      <div className="bg-white rounded-xl border border-red-200/50 shadow-sm overflow-hidden flex flex-col justify-between">
-        {/* Table Header with Search */}
-        <div className="p-4 border-b border-red-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <div className="relative flex-1 max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/50" />
-            <input
-              type="text"
-              placeholder="Search clients..."
-              className="w-full pl-10 pr-4 py-2 border border-red-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7d3431]/20 focus:border-[#7d3431] text-sm text-black"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-          <div className="text-sm text-black/70">
-            Showing {filteredClients.length} clients
-          </div>
-        </div>
+      {/* Integrated Control Section */}
+      <div className="bg-white rounded-xl border border-red-100 p-4 shadow-md overflow-hidden flex flex-col justify-between">
+        
+        {/* Table Header with Search and Integrated Add Button */}
+     <div className="mb-4 flex justify-end">
+  <div className="flex items-center gap-3">
+    <div className="relative w-80">
+      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/40" />
+      <input
+        type="text"
+        placeholder="Search certificates..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="w-full pl-10 pr-4 py-2 border border-red-200 rounded-lg"
+      />
+    </div>
 
+    <button
+      onClick={() => setIsModalOpen(true)}
+      className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-600 to-red-500 text-white rounded-xl whitespace-nowrap"
+    >
+      <Plus className="w-4 h-4" />
+      Add Certificate
+    </button>
+  </div>
+</div>
+
+        {/* Table View */}
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-sm">
             <thead>
-              <tr className="bg-gradient-to-r from-[#7d3431]/5 to-[#cb8c89]/5 border-b border-red-200 text-black font-bold uppercase text-xs tracking-wider">
-                <th className="px-6 py-3.5 w-[120px]">Company</th>
-                <th className="px-6 py-3.5">Client</th>
-                <th className="px-6 py-3.5">Description</th>
-                <th className="px-6 py-3.5 w-[180px]">Designation</th>
-                <th className="px-6 py-3.5 w-[180px] text-right">Actions</th>
+              <tr className="bg-gradient-to-r from-red-50/50 to-rose-50/50 border-b border-red-100 text-red-900 font-bold uppercase text-xs tracking-wider">
+                <th className="px-6 py-4 w-[120px]">Image</th>
+                <th className="px-6 py-4">Title</th>
+                <th className="px-6 py-4">Description</th>
+                <th className="px-6 py-4 w-[120px]">Status</th>
+                <th className="px-6 py-4 w-[160px]">Created Date</th>
+                <th className="px-6 py-4 w-[180px] text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-red-100">
-              {currentClients.length === 0 ? (
+            <tbody className="divide-y divide-red-50/60">
+              {currentFoundations.length === 0 ? (
                 <tr>
-                  <td colSpan="5" className="text-center py-16 text-black/40">
-                    <Users className="w-10 h-10 mx-auto opacity-20 mb-2" />
-                    <p className="font-medium text-sm">No clients found</p>
+                  <td colSpan="6" className="text-center py-16 text-slate-400">
+                    <Building2 className="w-12 h-12 mx-auto opacity-30 mb-2 text-red-500" />
+                    <p className="font-semibold text-sm">No foundations found matching search</p>
                   </td>
                 </tr>
               ) : (
-                currentClients.map((client) => (
-                  <tr key={client.id} className="hover:bg-[#7d3431]/5 transition-colors">
-                    <td className="px-6 py-3">
-                      <div className="w-16 h-16 rounded-lg bg-slate-100 overflow-hidden border border-red-200 shadow-sm">
-                        <img src={client.companyImage} alt="Company" className="w-full h-full object-cover" />
+                currentFoundations.map((foundation) => (
+                  <tr key={foundation.id} className="hover:bg-red-50/10 transition-colors">
+                    <td className="px-6 py-3.5">
+                      <div className="w-16 h-16 rounded-lg bg-slate-50 overflow-hidden border border-red-100 shadow-xs">
+                        <img src={foundation.imageUrl} alt={foundation.title} className="w-full h-full object-cover" />
                       </div>
                     </td>
-
-                    <td className="px-6 py-3">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-slate-100 overflow-hidden border border-red-200 shadow-sm flex-shrink-0">
-                          <img src={client.clientImage} alt={client.clientName} className="w-full h-full object-cover" />
-                        </div>
-                        <span className="font-semibold text-black block max-w-xs truncate">{client.clientName}</span>
-                      </div>
+                    
+                    <td className="px-6 py-3.5">
+                      <span className="font-bold text-black block max-w-xs truncate">{foundation.title}</span>
                     </td>
 
-                    <td className="px-6 py-3">
-                      <span className="text-black/70 block max-w-sm">
-                        {truncateText(client.description, 60)}
+                    <td className="px-6 py-3.5">
+                      <span className="text-black/70 block max-w-sm leading-relaxed">
+                        {truncateText(foundation.description)}
                       </span>
                     </td>
 
-                    <td className="px-6 py-3 text-black/70 font-medium whitespace-nowrap">
-                      {client.clientDesignation}
+                    <td className="px-6 py-3.5">
+                      <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold border ${getStatusColor(foundation.status)}`}>
+                        <span className={`w-1.5 h-1.5 rounded-full mr-1.5 
+                          ${foundation.status === 'Active' ? 'bg-emerald-500' : 'bg-amber-500'}
+                        `} />
+                        {foundation.status}
+                      </span>
                     </td>
 
-                    <td className="px-6 py-3 text-right">
-                      <div className="flex justify-end gap-1.5">
+                    <td className="px-6 py-3.5 text-black/60 font-medium">
+                      {foundation.createdAt}
+                    </td>
+
+                    <td className="px-6 py-3.5 text-right">
+                      <div className="flex justify-end gap-1">
                         <button 
-                          onClick={() => handleView(client)}
-                          title="View" 
-                          className="p-2 text-black/50 rounded-lg hover:text-[#7d3431] hover:bg-[#7d3431]/10 transition-all duration-200"
+                          onClick={() => handleView(foundation)}
+                          title="View Details" 
+                          className="p-2 text-red-400 rounded-lg hover:text-red-600 hover:bg-red-50 transition-all duration-200"
                         >
                           <Eye className="w-4 h-4" />
                         </button>
                         <button 
-                          onClick={() => handleEdit(client)}
+                          onClick={() => handleEdit(foundation)}
                           title="Edit" 
-                          className="p-2 text-black/50 rounded-lg hover:text-[#a55d5b] hover:bg-[#a55d5b]/10 transition-all duration-200"
+                          className="p-2 text-rose-400 rounded-lg hover:text-rose-600 hover:bg-rose-50 transition-all duration-200"
                         >
                           <Edit2 className="w-4 h-4" />
                         </button>
                         <button 
-                          onClick={() => handleDelete(client.id)}
+                          onClick={() => handleDelete(foundation.id)}
                           title="Delete" 
-                          className="p-2 text-black/50 rounded-lg hover:text-red-600 hover:bg-red-50 transition-all duration-200"
+                          className="p-2 text-slate-400 rounded-lg hover:text-red-600 hover:bg-red-50 transition-all duration-200"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -358,22 +354,22 @@ export default function Client() {
           </table>
         </div>
 
-        {/* Pagination */}
-        {filteredClients.length > 0 && (
-          <div className="px-6 py-3.5 border-t border-red-100 flex flex-col sm:flex-row justify-between items-center gap-4 bg-[#7d3431]/5">
+        {/* Pagination Controls */}
+        {filteredFoundations.length > 0 && (
+          <div className="px-6 py-4 border-t border-red-50 flex flex-col sm:flex-row justify-between items-center gap-4 bg-gradient-to-r from-red-50/10 to-rose-50/10">
             <span className="font-medium text-black/70 text-sm">
-              Showing <span className="text-black font-semibold">{indexOfFirstItem + 1}</span> to{' '}
-              <span className="text-black font-semibold">
-                {Math.min(indexOfLastItem, filteredClients.length)}
+              Showing <span className="text-red-600 font-bold">{indexOfFirstItem + 1}</span> to{' '}
+              <span className="text-red-600 font-bold">
+                {indexOfLastItem > filteredFoundations.length ? filteredFoundations.length : indexOfLastItem}
               </span>{' '}
-              of <span className="text-black font-semibold">{filteredClients.length}</span> entries
+              of <span className="text-red-600 font-bold">{filteredFoundations.length}</span> records
             </span>
 
             <div className="flex items-center gap-1.5">
               <button
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
-                className="p-1.5 rounded-lg border border-red-200 bg-white text-black/60 hover:bg-[#7d3431]/10 hover:border-[#7d3431] disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
+                className="p-2 rounded-lg border border-red-100 bg-white text-red-600/60 hover:bg-red-50 hover:border-red-300 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
@@ -387,8 +383,8 @@ export default function Client() {
                     onClick={() => handlePageChange(pageNum)}
                     className={`w-8 h-8 rounded-lg text-xs font-bold transition-all duration-200 ${
                       isSelected
-                        ? 'bg-gradient-to-r from-[#7d3431] to-[#cb8c89] text-white shadow-md shadow-[#7d3431]/20'
-                        : 'bg-white border border-red-200 text-black hover:bg-[#7d3431]/10 hover:border-[#7d3431]'
+                        ? 'bg-gradient-to-r from-red-600 to-rose-600 text-white shadow-md shadow-red-600/20'
+                        : 'bg-white border border-red-100 text-black hover:bg-red-50 hover:border-red-300'
                     }`}
                   >
                     {pageNum}
@@ -399,7 +395,7 @@ export default function Client() {
               <button
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
-                className="p-1.5 rounded-lg border border-red-200 bg-white text-black/60 hover:bg-[#7d3431]/10 hover:border-[#7d3431] disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
+                className="p-2 rounded-lg border border-red-100 bg-white text-red-600/60 hover:bg-red-50 hover:border-red-300 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -408,158 +404,106 @@ export default function Client() {
         )}
       </div>
 
-      {/* Add/Edit Modal */}
+      {/* Dynamic Add/Edit Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={closeModal}>
-          <div className="bg-white rounded-xl w-full max-w-md p-6 shadow-xl border border-red-200" onClick={(e) => e.stopPropagation()}>
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-bold text-black">
-                {editingId ? 'Edit Client' : 'Add New Client'}
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl w-full max-w-md p-6 shadow-2xl border border-red-50">
+            <div className="flex justify-between items-center mb-5 pb-2 border-b border-red-50">
+              <h3 className="text-lg font-bold text-red-900">
+                {editingId ? 'Edit Foundation Details' : 'Create New Foundation'}
               </h3>
               <button 
                 onClick={closeModal} 
-                className="p-2 rounded-lg text-black/40 hover:bg-[#7d3431]/10 hover:text-[#7d3431] transition-all duration-200"
+                className="p-1.5 rounded-lg text-black/40 hover:bg-red-50 hover:text-red-600 transition-all"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <form onSubmit={editingId ? handleUpdateClient : handleCreateClient} className="space-y-4 text-sm">
-              {/* Company Image */}
+            <form onSubmit={editingId ? handleUpdateFoundation : handleCreateFoundation} className="space-y-4 text-sm">
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-black mb-1.5">
-                  Company Image *
+                <label className="block text-xs font-bold uppercase tracking-wider text-red-600 mb-1.5">
+                  Foundation Image *
                 </label>
-                {companyPreview ? (
-                  <div className="relative w-full h-32 rounded-lg overflow-hidden border-2 border-[#7d3431]/20">
-                    <img 
-                      key={companyPreview} 
-                      src={companyPreview} 
-                      alt="Company" 
-                      className="w-full h-full object-cover" 
-                    />
+                {previewUrl ? (
+                  <div className="relative w-full h-40 rounded-lg overflow-hidden border border-red-100 shadow-inner">
+                    <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
                     <button
                       type="button"
                       onClick={() => {
-                        if (companyPreview && !companyPreview.startsWith('http')) URL.revokeObjectURL(companyPreview);
-                        setCompanyPreview('');
-                        setCompanyImage(null);
+                        setPreviewUrl('');
+                        setImage(null);
                       }}
-                      className="absolute top-2 right-2 p-1.5 bg-gradient-to-r from-[#7d3431] to-[#cb8c89] text-white rounded-full shadow-lg hover:shadow-[#7d3431]/30 transition-all"
+                      className="absolute top-2 right-2 p-1.5 bg-gradient-to-r from-red-600 to-rose-600 text-white rounded-full shadow-md hover:brightness-110 transition-all"
                     >
                       <X className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 ) : (
-                  <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-[#7d3431]/30 rounded-lg cursor-pointer hover:bg-[#7d3431]/5 transition-all duration-200 hover:border-[#7d3431]">
-                    <Upload className="w-8 h-8 text-[#7d3431]/50 mb-2" />
-                    <span className="text-sm font-medium text-black">Upload company logo</span>
-                    <span className="text-xs text-black/50 mt-1">PNG, JPG, GIF up to 5MB</span>
-                    <input 
-                      type="file" 
-                      accept="image/*" 
-                      className="hidden" 
-                      onChange={(e) => handleImageChange(e, 'company')} 
-                    />
+                  <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-red-200 rounded-lg cursor-pointer hover:bg-red-50/50 transition-all duration-200 hover:border-red-400">
+                    <Upload className="w-8 h-8 text-red-400 mb-2" />
+                    <span className="text-sm font-semibold text-black">Click to upload image</span>
+                    <span className="text-xs text-black/40 mt-1">PNG, JPG, JPEG up to 5MB</span>
+                    <input type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
                   </label>
                 )}
               </div>
 
-              {/* Client Image */}
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-black mb-1.5">
-                  Client Image *
-                </label>
-                {clientPreview ? (
-                  <div className="relative w-full h-32 rounded-lg overflow-hidden border-2 border-[#7d3431]/20">
-                    <img 
-                      key={clientPreview} 
-                      src={clientPreview} 
-                      alt="Client" 
-                      className="w-full h-full object-cover" 
-                    />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (clientPreview && !clientPreview.startsWith('http')) URL.revokeObjectURL(clientPreview);
-                        setClientPreview('');
-                        setClientImage(null);
-                      }}
-                      className="absolute top-2 right-2 p-1.5 bg-gradient-to-r from-[#7d3431] to-[#cb8c89] text-white rounded-full shadow-lg hover:shadow-[#7d3431]/30 transition-all"
-                    >
-                      <X className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                ) : (
-                  <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-[#7d3431]/30 rounded-lg cursor-pointer hover:bg-[#7d3431]/5 transition-all duration-200 hover:border-[#7d3431]">
-                    <Upload className="w-8 h-8 text-[#7d3431]/50 mb-2" />
-                    <span className="text-sm font-medium text-black">Upload client photo</span>
-                    <span className="text-xs text-black/50 mt-1">PNG, JPG, GIF up to 5MB</span>
-                    <input 
-                      type="file" 
-                      accept="image/*" 
-                      className="hidden" 
-                      onChange={(e) => handleImageChange(e, 'client')} 
-                    />
-                  </label>
-                )}
-              </div>
-
-              {/* Client Name */}
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-black mb-1.5">
-                  Client Name *
+                <label className="block text-xs font-bold uppercase tracking-wider text-red-600 mb-1.5">
+                  Foundation Title *
                 </label>
                 <input 
                   type="text" 
-                  value={clientName}
-                  onChange={(e) => setClientName(e.target.value)}
-                  placeholder="e.g. John Doe"
-                  className="w-full px-3.5 py-2.5 rounded-lg border border-[#7d3431]/20 text-sm text-black focus:outline-none focus:border-[#7d3431] focus:ring-2 focus:ring-[#7d3431]/20 transition-all"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder="e.g. Green Earth Foundation"
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-red-200 text-sm text-black focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all bg-white"
+                  required
                 />
               </div>
 
-              {/* Client Designation */}
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-black mb-1.5">
-                  Client Designation *
-                </label>
-                <input 
-                  type="text" 
-                  value={clientDesignation}
-                  onChange={(e) => setClientDesignation(e.target.value)}
-                  placeholder="e.g. CEO, TechCorp"
-                  className="w-full px-3.5 py-2.5 rounded-lg border border-[#7d3431]/20 text-sm text-black focus:outline-none focus:border-[#7d3431] focus:ring-2 focus:ring-[#7d3431]/20 transition-all"
-                />
-              </div>
-
-              {/* Description */}
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-black mb-1.5">
-                  Description
+                <label className="block text-xs font-bold uppercase tracking-wider text-red-600 mb-1.5">
+                  Description *
                 </label>
                 <textarea 
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Brief description about the client or company..."
+                  placeholder="Describe the foundation's mission and work..."
                   rows="3"
-                  className="w-full px-3.5 py-2.5 rounded-lg border border-[#7d3431]/20 text-sm text-black focus:outline-none focus:border-[#7d3431] focus:ring-2 focus:ring-[#7d3431]/20 transition-all resize-none"
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-red-200 text-sm text-black focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all resize-none bg-white"
+                  required
                 />
               </div>
 
-              <div className="flex gap-2.5 pt-2">
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-red-600 mb-1.5">
+                  Status
+                </label>
+                <select
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-red-200 text-sm text-black focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all bg-white"
+                >
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                </select>
+              </div>
+
+              <div className="flex gap-3 pt-3 border-t border-red-50">
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="flex-1 py-2.5 border border-[#7d3431]/20 rounded-lg font-semibold text-black/70 hover:bg-[#7d3431]/5 transition-all duration-200"
+                  className="flex-1 py-2.5 border border-red-200 rounded-lg font-bold text-slate-600 hover:bg-slate-50 transition-all duration-200"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2.5 bg-gradient-to-r from-[#7d3431] to-[#cb8c89] text-white rounded-lg font-semibold hover:shadow-lg hover:shadow-[#7d3431]/20 transition-all duration-300"
+                  className="flex-1 py-2.5 bg-gradient-to-r from-red-600 to-rose-600 text-white rounded-lg font-bold hover:shadow-lg hover:shadow-red-600/20 hover:brightness-110 transition-all duration-300"
                 >
-                  {editingId ? 'Update Client' : 'Save Changes'}
+                  {editingId ? 'Update Foundation' : 'Save Foundation'}
                 </button>
               </div>
             </form>
@@ -567,97 +511,62 @@ export default function Client() {
         </div>
       )}
 
-      {/* View Modal */}
-      {isViewModalOpen && viewingClient && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={() => {
-          setIsViewModalOpen(false);
-          setViewingClient(null);
-        }}>
-          <div className="bg-white rounded-xl w-full max-w-lg p-6 shadow-xl border border-red-200" onClick={(e) => e.stopPropagation()}>
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-bold text-black">Client Details</h3>
+      {/* Detail View Modal */}
+      {isViewModalOpen && viewingFoundation && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl w-full max-w-lg p-6 shadow-2xl border border-red-50">
+            <div className="flex justify-between items-center mb-4 pb-2 border-b border-red-50">
+              <h3 className="text-lg font-bold text-red-900">Foundation File Details</h3>
               <button 
                 onClick={() => {
                   setIsViewModalOpen(false);
-                  setViewingClient(null);
+                  setViewingFoundation(null);
                 }}
-                className="p-2 rounded-lg text-black/40 hover:bg-[#7d3431]/10 hover:text-[#7d3431] transition-all duration-200"
+                className="p-1.5 rounded-lg text-black/40 hover:bg-red-50 hover:text-red-600 transition-all"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="space-y-5">
-              {/* Images Section */}
-              <div className="flex items-center gap-6 p-4 bg-gradient-to-r from-[#7d3431]/5 to-[#cb8c89]/5 rounded-xl border border-red-200/50">
-                <div className="flex flex-col items-center gap-1">
-                  <div className="w-20 h-20 rounded-lg overflow-hidden border-2 border-[#7d3431]/20 shadow-sm">
-                    <img 
-                      src={viewingClient.companyImage} 
-                      alt="Company" 
-                      className="w-full h-full object-cover" 
-                    />
-                  </div>
-                  <span className="text-[10px] font-medium text-black/50 uppercase tracking-wider">Company</span>
-                </div>
-                
-                <div className="flex-1 text-center">
-                  <div className="w-12 h-0.5 bg-gradient-to-r from-[#7d3431]/20 to-[#cb8c89]/20 mx-auto" />
-                </div>
-                
-                <div className="flex flex-col items-center gap-1">
-                  <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-[#7d3431]/20 shadow-sm">
-                    <img 
-                      src={viewingClient.clientImage} 
-                      alt={viewingClient.clientName} 
-                      className="w-full h-full object-cover" 
-                    />
-                  </div>
-                  <span className="text-[10px] font-medium text-black/50 uppercase tracking-wider">Client</span>
-                </div>
+            <div className="space-y-4">
+              <div className="w-full h-52 rounded-lg overflow-hidden border border-red-100 shadow-sm">
+                <img src={viewingFoundation.imageUrl} alt={viewingFoundation.title} className="w-full h-full object-cover" />
               </div>
-
-              {/* Details Grid */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="col-span-2">
-                  <div className="flex items-center gap-2 mb-1">
-                    <User className="w-3.5 h-3.5 text-[#7d3431]/60" />
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-black/50">Client Name</p>
-                  </div>
-                  <p className="text-sm font-semibold text-black bg-[#7d3431]/5 px-3 py-2 rounded-lg border border-red-200/50">
-                    {viewingClient.clientName}
-                  </p>
+              
+              <div className="space-y-3.5 bg-red-50/30 p-4 rounded-xl border border-red-50">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wider text-red-500">Foundation Name</p>
+                  <p className="text-base font-bold text-black mt-0.5">{viewingFoundation.title}</p>
                 </div>
-
-                <div className="col-span-2">
-                  <div className="flex items-center gap-2 mb-1">
-                    <Briefcase className="w-3.5 h-3.5 text-[#7d3431]/60" />
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-black/50">Designation</p>
-                  </div>
-                  <p className="text-sm font-medium text-black/80 bg-[#7d3431]/5 px-3 py-2 rounded-lg border border-red-200/50">
-                    {viewingClient.clientDesignation}
-                  </p>
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wider text-red-500">Mission & Profile</p>
+                  <p className="text-sm text-black/80 mt-0.5 leading-relaxed">{viewingFoundation.description}</p>
                 </div>
-
-                <div className="col-span-2">
-                  <div className="flex items-center gap-2 mb-1">
-                    <Building2 className="w-3.5 h-3.5 text-[#7d3431]/60" />
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-black/50">Description</p>
+                <div className="grid grid-cols-2 gap-4 pt-1">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-wider text-red-500">Current Status</p>
+                    <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold border mt-1.5 ${getStatusColor(viewingFoundation.status)}`}>
+                      <span className={`w-1.5 h-1.5 rounded-full mr-1.5 
+                        ${viewingFoundation.status === 'Active' ? 'bg-emerald-500' : 'bg-amber-500'}
+                      `} />
+                      {viewingFoundation.status}
+                    </span>
                   </div>
-                  <p className="text-sm text-black/70 bg-[#7d3431]/5 px-3 py-2 rounded-lg border border-red-200/50 min-h-[60px]">
-                    {viewingClient.description || <span className="text-black/40 italic">No description provided</span>}
-                  </p>
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-wider text-red-500">Registered Date</p>
+                    <p className="text-sm font-semibold text-black mt-1.5">{viewingFoundation.createdAt}</p>
+                  </div>
                 </div>
               </div>
 
               <button
                 onClick={() => {
                   setIsViewModalOpen(false);
-                  setViewingClient(null);
+                  setViewingFoundation(null);
                 }}
-                className="w-full py-2.5 bg-gradient-to-r from-[#7d3431] to-[#cb8c89] text-white rounded-lg font-semibold hover:shadow-lg hover:shadow-[#7d3431]/20 transition-all duration-300"
+                className="w-full py-2.5 bg-gradient-to-r from-red-600 to-rose-600 text-white rounded-lg font-bold hover:shadow-lg hover:shadow-red-600/20 hover:brightness-110 transition-all duration-300"
               >
-                Close
+                Back to List
               </button>
             </div>
           </div>

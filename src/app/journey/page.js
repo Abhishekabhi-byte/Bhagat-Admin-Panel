@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Clock, 
   Eye, 
@@ -151,9 +151,18 @@ export default function JourneyPage() {
   const currentEntries = filteredEntries.slice(indexOfFirstItem, indexOfLastItem);
 
   // Reset to page 1 when search changes
-  React.useEffect(() => {
+  useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm]);
+
+  // Ensure current page is always valid after filter changes
+  useEffect(() => {
+    if (filteredEntries.length === 0) {
+      setCurrentPage(1);
+    } else if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [filteredEntries.length, totalPages]);
 
   const handlePageChange = (pageNumber) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
@@ -268,12 +277,7 @@ export default function JourneyPage() {
   const handleDelete = (id) => {
     if (confirm('Are you sure you want to delete this journey entry?')) {
       const updatedEntries = journeyEntries.filter(entry => entry.id !== id);
-      setClients(updatedEntries); // Corrected dynamic references
       setJourneyEntries(updatedEntries);
-      const newTotalPages = Math.ceil(updatedEntries.length / itemsPerPage);
-      if (currentPage > newTotalPages && newTotalPages > 0) {
-        setCurrentPage(newTotalPages);
-      }
     }
   };
 
@@ -324,59 +328,55 @@ export default function JourneyPage() {
   };
 
   return (
-    <div className="space-y-5 max-w-7xl mx-auto bg-[#7d3431] py-1 px-1">
+    <div className="space-y-5 bg-[#7d3431] p-6 min-h-screen max-w-7xl mx-auto  shadow-xl">
       
-      {/* Top Controller Bar */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white py-4 px-5 rounded-xl shadow-sm border border-red-200/50">
-        <div>
-          <h2 className="text-lg font-bold text-black">Journey Timeline</h2>
-          <p className="text-xs text-black/70">Track and manage your company's journey milestones.</p>
-        </div>
-        <button 
-          onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#7d3431] to-[#cb8c89] text-white font-medium text-sm rounded-xl hover:shadow-lg hover:shadow-[#7d3431]/20 transition-all duration-300"
-        >
-          <Plus className="w-4 h-4" /> Add New Journey
-        </button>
-      </div>
+      {/* Integrated Title / Control Section */}
+      <div className="bg-white rounded-xl p-4 border border-[#cb8c89]/40 shadow-md overflow-hidden flex flex-col justify-between">
+        
+        {/* Table Header with Search and Integrated Add Button */}
+      <div className="mb-4 flex justify-end">
+  <div className="flex items-center gap-3">
+    <div className="relative w-80">
+      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/40" />
+      <input
+        type="text"
+        placeholder="Search certificates..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="w-full pl-10 pr-4 py-2 border border-red-200 rounded-lg"
+      />
+    </div>
 
-      {/* Table Component */}
-      <div className="bg-white rounded-xl border border-red-200/50 shadow-sm overflow-hidden flex flex-col justify-between">
-        <div className="p-4 border-b border-red-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <div className="relative flex-1 max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/50" />
-            <input
-              type="text"
-              placeholder="Search journey entries..."
-              className="w-full pl-10 pr-4 py-2 border border-red-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7d3431]/20 focus:border-[#7d3431] text-sm text-black"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-          <div className="text-sm text-black/70">
-            Showing {filteredEntries.length} entries
-          </div>
-        </div>
+    <button
+      onClick={() => setIsModalOpen(true)}
+      className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-600 to-red-500 text-white rounded-xl whitespace-nowrap"
+    >
+      <Plus className="w-4 h-4" />
+      Add Certificate
+    </button>
+  </div>
+</div>
 
+        {/* Table View */}
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-sm">
             <thead>
-              <tr className="bg-gradient-to-r from-[#7d3431]/5 to-[#cb8c89]/5 border-b border-red-200 text-black font-bold uppercase text-xs tracking-wider">
-                <th className="px-6 py-3.5 w-[100px]">Image</th>
-                <th className="px-6 py-3.5 w-[220px]">Title</th>
-                <th className="px-6 py-3.5">Description</th>
-                <th className="px-6 py-3.5 w-[140px]">Date Range</th>
-                <th className="px-6 py-3.5 w-[150px]">Category</th>
-                <th className="px-6 py-3.5 w-[110px]">Duration</th>
-                <th className="px-6 py-3.5 w-[150px] text-right">Actions</th>
+              <tr className="bg-gradient-to-r from-[#7d3431]/10 to-[#cb8c89]/10 border-b border-[#cb8c89]/40 text-[#7d3431] font-bold uppercase text-xs tracking-wider">
+                <th className="px-6 py-4 w-[100px]">Image</th>
+                <th className="px-6 py-4 w-[220px]">Title</th>
+                <th className="px-6 py-4">Description</th>
+                <th className="px-6 py-4 w-[140px]">Date Range</th>
+                <th className="px-6 py-4 w-[150px]">Category</th>
+                <th className="px-6 py-4 w-[110px]">Duration</th>
+                <th className="px-6 py-4 w-[150px] text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-red-100">
+            <tbody className="divide-y divide-[#7d3431]/10">
               {currentEntries.length === 0 ? (
                 <tr>
-                  <td colSpan="7" className="text-center py-16 text-black/40">
-                    <Clock className="w-10 h-10 mx-auto opacity-20 mb-2" />
-                    <p className="font-medium text-sm">No journey entries found</p>
+                  <td colSpan="7" className="text-center py-16 text-[#7d3431]/40">
+                    <Clock className="w-12 h-12 mx-auto opacity-30 mb-2 text-[#7d3431]" />
+                    <p className="font-semibold text-sm">No journey entries found matching search</p>
                   </td>
                 </tr>
               ) : (
@@ -384,58 +384,58 @@ export default function JourneyPage() {
                   const CategoryIcon = getCategoryIcon(entry.category);
                   return (
                     <tr key={entry.id} className="hover:bg-[#7d3431]/5 transition-colors">
-                      <td className="px-6 py-3">
-                        <div className="w-14 h-14 rounded-lg bg-slate-100 overflow-hidden border border-red-200 shadow-sm">
+                      <td className="px-6 py-3.5">
+                        <div className="w-14 h-14 rounded-lg bg-slate-50 overflow-hidden border border-[#cb8c89]/40 shadow-xs">
                           <img src={entry.imageUrl} alt={entry.title} className="w-full h-full object-cover" />
                         </div>
                       </td>
 
-                      <td className="px-6 py-3">
-                        <span className="font-semibold text-black block truncate max-w-[200px]">{entry.title}</span>
+                      <td className="px-6 py-3.5">
+                        <span className="font-bold text-black block truncate max-w-[200px]">{entry.title}</span>
                       </td>
 
-                      <td className="px-6 py-3 text-black/70">
-                        <span className="block max-w-xs xl:max-w-md truncate">{truncateText(entry.description, 60)}</span>
+                      <td className="px-3 py-3.5">
+                        <span className="text-black/70 block max-w-xs xl:max-w-md truncate">{truncateText(entry.description, 15)}</span>
                       </td>
 
-                      <td className="px-6 py-3 text-black/70 font-medium whitespace-nowrap text-xs">
+                      <td className="px-6 py-3.5 text-black/60 font-medium whitespace-nowrap text-xs">
                         {formatDateRange(entry)}
                       </td>
 
-                      <td className="px-6 py-3 whitespace-nowrap">
+                      <td className="px-6 py-3.5 whitespace-nowrap">
                         <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${getCategoryColor(entry.category)}`}>
                           <CategoryIcon className="w-3 h-3 flex-shrink-0" />
                           {getCategoryLabel(entry.category)}
                         </span>
                       </td>
 
-                      <td className="px-6 py-3 text-black/70 font-medium whitespace-nowrap">
-                        <span className="inline-flex items-center gap-1 bg-[#7d3431]/5 px-2.5 py-1 rounded-lg border border-red-200/50 text-xs">
+                      <td className="px-6 py-3.5 text-black/70 font-medium whitespace-nowrap">
+                        <span className="inline-flex items-center gap-1 bg-[#7d3431]/5 px-2.5 py-1 rounded-lg border border-[#cb8c89]/40 text-xs">
                           <Clock className="w-3 h-3 text-[#7d3431]/60" />
                           {getDuration(entry)} {getDuration(entry) === 1 ? 'year' : 'years'}
                         </span>
                       </td>
 
-                      <td className="px-6 py-3 text-right">
+                      <td className="px-6 py-3.5 text-right">
                         <div className="flex justify-end gap-1">
                           <button 
                             onClick={() => handleView(entry)}
-                            title="View" 
-                            className="p-2 text-black/50 rounded-lg hover:text-[#7d3431] hover:bg-[#7d3431]/10 transition-all duration-200"
+                            title="View Details" 
+                            className="p-2 text-[#7d3431]/60 rounded-lg hover:text-[#7d3431] hover:bg-[#7d3431]/10 transition-all duration-200"
                           >
                             <Eye className="w-4 h-4" />
                           </button>
                           <button 
                             onClick={() => handleEdit(entry)}
                             title="Edit" 
-                            className="p-2 text-black/50 rounded-lg hover:text-[#a55d5b] hover:bg-[#a55d5b]/10 transition-all duration-200"
+                            className="p-2 text-[#cb8c89] rounded-lg hover:text-[#7d3431] hover:bg-[#cb8c89]/10 transition-all duration-200"
                           >
                             <Edit2 className="w-4 h-4" />
                           </button>
                           <button 
                             onClick={() => handleDelete(entry.id)}
                             title="Delete" 
-                            className="p-2 text-black/50 rounded-lg hover:text-red-600 hover:bg-red-50 transition-all duration-200"
+                            className="p-2 text-black/40 rounded-lg hover:text-red-600 hover:bg-red-50 transition-all duration-200"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
@@ -451,20 +451,20 @@ export default function JourneyPage() {
 
         {/* Pagination Controls */}
         {filteredEntries.length > 0 && (
-          <div className="px-6 py-3.5 border-t border-red-100 flex flex-col sm:flex-row justify-between items-center gap-4 bg-[#7d3431]/5">
+          <div className="px-6 py-4 border-t border-[#7d3431]/10 flex flex-col sm:flex-row justify-between items-center gap-4 bg-gradient-to-r from-[#7d3431]/5 to-[#cb8c89]/5">
             <span className="font-medium text-black/70 text-sm">
-              Showing <span className="text-black font-semibold">{indexOfFirstItem + 1}</span> to{' '}
-              <span className="text-black font-semibold">
+              Showing <span className="text-[#7d3431] font-bold">{indexOfFirstItem + 1}</span> to{' '}
+              <span className="text-[#7d3431] font-bold">
                 {Math.min(indexOfLastItem, filteredEntries.length)}
               </span>{' '}
-              of <span className="text-black font-semibold">{filteredEntries.length}</span> entries
+              of <span className="text-[#7d3431] font-bold">{filteredEntries.length}</span> records
             </span>
 
             <div className="flex items-center gap-1.5">
               <button
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
-                className="p-1.5 rounded-lg border border-red-200 bg-white text-black/60 hover:bg-[#7d3431]/10 hover:border-[#7d3431] disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
+                className="p-2 rounded-lg border border-[#cb8c89]/40 bg-white text-[#7d3431]/60 hover:bg-[#7d3431]/10 hover:border-[#7d3431] disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
@@ -478,8 +478,8 @@ export default function JourneyPage() {
                     onClick={() => handlePageChange(pageNum)}
                     className={`w-8 h-8 rounded-lg text-xs font-bold transition-all duration-200 ${
                       isSelected
-                        ? 'bg-gradient-to-r from-[#7d3431] to-[#cb8c89] text-white shadow-md shadow-[#7d3431]/20'
-                        : 'bg-white border border-red-200 text-black hover:bg-[#7d3431]/10 hover:border-[#7d3431]'
+                        ? 'bg-gradient-to-r from-[#7d3431] to-[#cb8c89] text-white shadow-md shadow-[#7d3431]/30'
+                        : 'bg-white border border-[#cb8c89]/40 text-black hover:bg-[#7d3431]/10 hover:border-[#7d3431]'
                     }`}
                   >
                     {pageNum}
@@ -490,7 +490,7 @@ export default function JourneyPage() {
               <button
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
-                className="p-1.5 rounded-lg border border-red-200 bg-white text-black/60 hover:bg-[#7d3431]/10 hover:border-[#7d3431] disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
+                className="p-2 rounded-lg border border-[#cb8c89]/40 bg-white text-[#7d3431]/60 hover:bg-[#7d3431]/10 hover:border-[#7d3431] disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -499,30 +499,29 @@ export default function JourneyPage() {
         )}
       </div>
 
-      {/* Add / Edit Modal Wrapper */}
+      {/* Dynamic Add/Edit Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={closeModal}>
-          <div className="bg-white rounded-xl w-full max-w-md p-6 shadow-xl border border-red-200 max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-bold text-black">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl w-full max-w-md p-6 shadow-2xl border-2 border-[#7d3431]/20 max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-5 pb-2 border-b border-[#7d3431]/10">
+              <h3 className="text-lg font-bold text-[#7d3431]">
                 {editingId ? 'Edit Journey Milestone' : 'Add New Journey Milestone'}
               </h3>
               <button 
                 onClick={closeModal} 
-                className="p-2 rounded-lg text-black/40 hover:bg-[#7d3431]/10 hover:text-[#7d3431] transition-all duration-200"
+                className="p-1.5 rounded-lg text-black/40 hover:bg-[#7d3431]/10 hover:text-[#7d3431] transition-all"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <form onSubmit={editingId ? handleUpdateEntry : handleCreateEntry} className="space-y-4 text-sm">
-              {/* Image Input Selection */}
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-black mb-1.5">
+                <label className="block text-xs font-bold uppercase tracking-wider text-[#7d3431] mb-1.5">
                   Milestone Image *
                 </label>
                 {previewUrl ? (
-                  <div className="relative w-full h-40 rounded-lg overflow-hidden border-2 border-[#7d3431]/20">
+                  <div className="relative w-full h-40 rounded-lg overflow-hidden border-2 border-[#7d3431]/30 shadow-inner">
                     <img 
                       key={previewUrl} 
                       src={previewUrl} 
@@ -538,16 +537,16 @@ export default function JourneyPage() {
                         setPreviewUrl('');
                         setImage(null);
                       }}
-                      className="absolute top-2 right-2 p-1.5 bg-gradient-to-r from-[#7d3431] to-[#cb8c89] text-white rounded-full shadow-lg hover:shadow-[#7d3431]/30 transition-all"
+                      className="absolute top-2 right-2 p-1.5 bg-gradient-to-r from-[#7d3431] to-[#cb8c89] text-white rounded-full shadow-md hover:brightness-110 transition-all"
                     >
                       <X className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 ) : (
-                  <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-[#7d3431]/30 rounded-lg cursor-pointer hover:bg-[#7d3431]/5 transition-all duration-200 hover:border-[#7d3431]">
+                  <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-[#cb8c89] rounded-lg cursor-pointer hover:bg-[#7d3431]/5 transition-all duration-200 hover:border-[#7d3431]">
                     <Upload className="w-8 h-8 text-[#7d3431]/50 mb-2" />
-                    <span className="text-sm font-medium text-black">Click to upload milestone photo</span>
-                    <span className="text-xs text-black/50 mt-1">PNG, JPG, GIF up to 5MB</span>
+                    <span className="text-sm font-semibold text-black">Click to upload milestone photo</span>
+                    <span className="text-xs text-black/40 mt-1">PNG, JPG, JPEG up to 5MB</span>
                     <input 
                       type="file" 
                       accept="image/*" 
@@ -558,9 +557,8 @@ export default function JourneyPage() {
                 )}
               </div>
 
-              {/* Title Form Field */}
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-black mb-1.5">
+                <label className="block text-xs font-bold uppercase tracking-wider text-[#7d3431] mb-1.5">
                   Title *
                 </label>
                 <input 
@@ -568,13 +566,12 @@ export default function JourneyPage() {
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="e.g. Infrastructure Modernization"
-                  className="w-full px-3.5 py-2.5 rounded-lg border border-[#7d3431]/20 text-sm text-black focus:outline-none focus:border-[#7d3431] focus:ring-2 focus:ring-[#7d3431]/20 transition-all"
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-[#cb8c89]/60 text-sm text-black focus:outline-none focus:border-[#7d3431] focus:ring-2 focus:ring-[#7d3431]/20 transition-all bg-white"
                 />
               </div>
 
-              {/* Description Form Field */}
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-black mb-1.5">
+                <label className="block text-xs font-bold uppercase tracking-wider text-[#7d3431] mb-1.5">
                   Description *
                 </label>
                 <textarea 
@@ -582,19 +579,18 @@ export default function JourneyPage() {
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Provide precise execution summaries or achievements..."
                   rows="3"
-                  className="w-full px-3.5 py-2.5 rounded-lg border border-[#7d3431]/20 text-sm text-black focus:outline-none focus:border-[#7d3431] focus:ring-2 focus:ring-[#7d3431]/20 transition-all resize-none"
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-[#cb8c89]/60 text-sm text-black focus:outline-none focus:border-[#7d3431] focus:ring-2 focus:ring-[#7d3431]/20 transition-all resize-none bg-white"
                 />
               </div>
 
-              {/* Category Dropdown Selection */}
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-black mb-1.5">
+                <label className="block text-xs font-bold uppercase tracking-wider text-[#7d3431] mb-1.5">
                   Category *
                 </label>
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-lg border border-[#7d3431]/20 text-sm text-black focus:outline-none focus:border-[#7d3431] focus:ring-2 focus:ring-[#7d3431]/20 transition-all"
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-[#cb8c89]/60 text-sm text-black focus:outline-none focus:border-[#7d3431] focus:ring-2 focus:ring-[#7d3431]/20 transition-all bg-white"
                 >
                   {categories.map((cat) => (
                     <option key={cat.value} value={cat.value}>{cat.label}</option>
@@ -602,21 +598,20 @@ export default function JourneyPage() {
                 </select>
               </div>
 
-              {/* Range Configuration Row */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-black mb-1.5">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-[#7d3431] mb-1.5">
                     Start Date *
                   </label>
                   <input 
                     type="date" 
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-lg border border-[#7d3431]/20 text-sm text-black focus:outline-none focus:border-[#7d3431] focus:ring-2 focus:ring-[#7d3431]/20 transition-all"
+                    className="w-full px-3.5 py-2.5 rounded-lg border border-[#cb8c89]/60 text-sm text-black focus:outline-none focus:border-[#7d3431] focus:ring-2 focus:ring-[#7d3431]/20 transition-all bg-white"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-black mb-1.5">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-[#7d3431] mb-1.5">
                     End Date
                   </label>
                   <input 
@@ -624,14 +619,13 @@ export default function JourneyPage() {
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
                     disabled={isPresent}
-                    className={`w-full px-3.5 py-2.5 rounded-lg border text-sm text-black focus:outline-none focus:border-[#7d3431] focus:ring-2 focus:ring-[#7d3431]/20 transition-all ${
-                      isPresent ? 'bg-gray-100 border-gray-200 cursor-not-allowed' : 'border-[#7d3431]/20'
+                    className={`w-full px-3.5 py-2.5 rounded-lg border text-sm text-black focus:outline-none focus:border-[#7d3431] focus:ring-2 focus:ring-[#7d3431]/20 transition-all bg-white ${
+                      isPresent ? 'bg-gray-100 border-gray-200 cursor-not-allowed' : 'border-[#cb8c89]/60'
                     }`}
                   />
                 </div>
               </div>
 
-              {/* Present Checkbox Flag */}
               <div className="flex items-center gap-2 pt-1">
                 <input
                   type="checkbox"
@@ -650,18 +644,17 @@ export default function JourneyPage() {
                 </label>
               </div>
 
-              {/* Action Buttons */}
-              <div className="flex gap-2.5 pt-2">
+              <div className="flex gap-3 pt-3 border-t border-[#7d3431]/10">
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="flex-1 py-2.5 border border-[#7d3431]/20 rounded-lg font-semibold text-black/70 hover:bg-[#7d3431]/5 transition-all duration-200"
+                  className="flex-1 py-2.5 border border-[#cb8c89] rounded-lg font-bold text-[#7d3431] hover:bg-[#7d3431]/5 transition-all duration-200"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2.5 bg-gradient-to-r from-[#7d3431] to-[#cb8c89] text-white rounded-lg font-semibold hover:shadow-lg hover:shadow-[#7d3431]/20 transition-all duration-300"
+                  className="flex-1 py-2.5 bg-gradient-to-r from-[#7d3431] to-[#cb8c89] text-white rounded-lg font-bold hover:shadow-lg hover:shadow-[#7d3431]/30 hover:brightness-110 transition-all duration-300"
                 >
                   {editingId ? 'Update Milestone' : 'Save Milestone'}
                 </button>
@@ -671,29 +664,25 @@ export default function JourneyPage() {
         </div>
       )}
 
-      {/* View Details Modal */}
+      {/* Detail View Modal */}
       {isViewModalOpen && viewingEntry && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={() => {
-          setIsViewModalOpen(false);
-          setViewingEntry(null);
-        }}>
-          <div className="bg-white rounded-xl w-full max-w-lg p-6 shadow-xl border border-red-200" onClick={(e) => e.stopPropagation()}>
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-bold text-black">Milestone Specification Overview</h3>
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl w-full max-w-lg p-6 shadow-2xl border-2 border-[#7d3431]/20">
+            <div className="flex justify-between items-center mb-4 pb-2 border-b border-[#7d3431]/10">
+              <h3 className="text-lg font-bold text-[#7d3431]">Milestone Specification Overview</h3>
               <button 
                 onClick={() => {
                   setIsViewModalOpen(false);
                   setViewingEntry(null);
                 }}
-                className="p-2 rounded-lg text-black/40 hover:bg-[#7d3431]/10 hover:text-[#7d3431] transition-all duration-200"
+                className="p-1.5 rounded-lg text-black/40 hover:bg-[#7d3431]/10 hover:text-[#7d3431] transition-all"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="space-y-5">
-              {/* Main Preview Block */}
-              <div className="w-full h-48 rounded-lg overflow-hidden border-2 border-[#7d3431]/20 shadow-sm">
+            <div className="space-y-4">
+              <div className="w-full h-48 rounded-lg overflow-hidden border-2 border-[#cb8c89]/40 shadow-sm">
                 <img 
                   src={viewingEntry.imageUrl} 
                   alt={viewingEntry.title} 
@@ -701,57 +690,33 @@ export default function JourneyPage() {
                 />
               </div>
 
-              {/* Details Metrics Grid */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="col-span-2">
-                  <div className="flex items-center gap-2 mb-1">
-                    <BookOpen className="w-3.5 h-3.5 text-[#7d3431]/60" />
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-black/50">Milestone Title</p>
-                  </div>
-                  <p className="text-sm font-semibold text-black bg-[#7d3431]/5 px-3 py-2 rounded-lg border border-red-200/50">
-                    {viewingEntry.title}
-                  </p>
+              <div className="space-y-3.5 bg-[#7d3431]/5 p-4 rounded-xl border border-[#cb8c89]/20">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wider text-[#7d3431]">Milestone Title</p>
+                  <p className="text-base font-bold text-black mt-0.5">{viewingEntry.title}</p>
                 </div>
-
-                <div className="col-span-2">
-                  <div className="flex items-center gap-2 mb-1">
-                    <Tag className="w-3.5 h-3.5 text-[#7d3431]/60" />
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-black/50">Full Description</p>
-                  </div>
-                  <p className="text-sm text-black/70 bg-[#7d3431]/5 px-3 py-2 rounded-lg border border-red-200/50 min-h-[70px] whitespace-pre-line">
-                    {viewingEntry.description}
-                  </p>
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wider text-[#7d3431]">Full Description</p>
+                  <p className="text-sm text-black/80 mt-0.5 leading-relaxed">{viewingEntry.description}</p>
                 </div>
-
-                <div className="col-span-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <Tag className="w-3.5 h-3.5 text-[#7d3431]/60" />
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-black/50">Category Classification</p>
+                <div className="grid grid-cols-2 gap-4 pt-1">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-wider text-[#7d3431]">Category</p>
+                    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold border mt-1.5 ${getCategoryColor(viewingEntry.category)}`}>
+                      {React.createElement(getCategoryIcon(viewingEntry.category), { className: 'w-3 h-3 flex-shrink-0' })}
+                      {getCategoryLabel(viewingEntry.category)}
+                    </span>
                   </div>
-                  <span className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold border ${getCategoryColor(viewingEntry.category)}`}>
-                    {React.createElement(getCategoryIcon(viewingEntry.category), { className: 'w-3 h-3 flex-shrink-0' })}
-                    {getCategoryLabel(viewingEntry.category)}
-                  </span>
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-wider text-[#7d3431]">Duration</p>
+                    <p className="text-sm font-semibold text-black mt-1.5">
+                      {getDuration(viewingEntry)} {getDuration(viewingEntry) === 1 ? 'year' : 'years'}
+                    </p>
+                  </div>
                 </div>
-
-                <div className="col-span-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <Clock className="w-3.5 h-3.5 text-[#7d3431]/60" />
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-black/50">Track Duration</p>
-                  </div>
-                  <p className="text-xs font-bold text-black/80 bg-[#7d3431]/5 px-3 py-1.5 rounded-lg border border-red-200/50 inline-flex items-center gap-1">
-                    {getDuration(viewingEntry)} {getDuration(viewingEntry) === 1 ? 'year' : 'years'}
-                  </p>
-                </div>
-
-                <div className="col-span-2">
-                  <div className="flex items-center gap-2 mb-1">
-                    <Calendar className="w-3.5 h-3.5 text-[#7d3431]/60" />
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-black/50">Active Timelines</p>
-                  </div>
-                  <p className="text-sm font-semibold text-black bg-[#7d3431]/5 px-3 py-2 rounded-lg border border-red-200/50">
-                    {formatDateRange(viewingEntry)}
-                  </p>
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wider text-[#7d3431]">Active Timelines</p>
+                  <p className="text-sm font-semibold text-black mt-0.5">{formatDateRange(viewingEntry)}</p>
                 </div>
               </div>
 
@@ -760,7 +725,7 @@ export default function JourneyPage() {
                   setIsViewModalOpen(false);
                   setViewingEntry(null);
                 }}
-                className="w-full py-2.5 bg-gradient-to-r from-[#7d3431] to-[#cb8c89] text-white rounded-lg font-semibold hover:shadow-lg hover:shadow-[#7d3431]/20 transition-all duration-300"
+                className="w-full py-2.5 bg-gradient-to-r from-[#7d3431] to-[#cb8c89] text-white rounded-lg font-bold hover:shadow-lg hover:shadow-[#7d3431]/30 hover:brightness-110 transition-all duration-300"
               >
                 Close View
               </button>

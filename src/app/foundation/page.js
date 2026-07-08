@@ -1,7 +1,6 @@
-// app/foundation/page.js
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Building2, 
   Eye, 
@@ -12,9 +11,7 @@ import {
   X, 
   ChevronLeft, 
   ChevronRight,
-  Search,
-  Calendar,
-  Globe
+  Search
 } from 'lucide-react';
 
 export default function FoundationPage() {
@@ -91,6 +88,15 @@ export default function FoundationPage() {
   const [viewingFoundation, setViewingFoundation] = useState(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
 
+  // Revoke object URLs to avoid memory leaks
+  useEffect(() => {
+    return () => {
+      if (previewUrl && previewUrl.startsWith('blob:')) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
+
   // Filter foundations based on search
   const filteredFoundations = foundations.filter(foundation =>
     foundation.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -103,9 +109,9 @@ export default function FoundationPage() {
   const currentFoundations = filteredFoundations.slice(indexOfFirstItem, indexOfLastItem);
 
   // Reset to page 1 when search changes
-  React.useEffect(() => {
+  useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm]);
+  }, [searchTerm, setCurrentPage]);
 
   const handlePageChange = (pageNumber) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
@@ -226,15 +232,14 @@ export default function FoundationPage() {
   const getStatusColor = (status) => {
     switch(status) {
       case 'Active':
-        return 'bg-emerald-100 text-emerald-700 border-emerald-200';
+        return 'bg-emerald-50 text-emerald-700 border-emerald-200';
       case 'Inactive':
-        return 'bg-amber-100 text-amber-700 border-amber-200';
+        return 'bg-amber-50 text-amber-700 border-amber-200';
       default:
-        return 'bg-gray-100 text-gray-700 border-gray-200';
+        return 'bg-gray-50 text-gray-700 border-gray-200';
     }
   };
 
-  // Helper to truncate description
   const truncateText = (text, maxLength = 60) => {
     if (!text) return '';
     if (text.length <= maxLength) return text;
@@ -242,114 +247,108 @@ export default function FoundationPage() {
   };
 
   return (
-    <div className="space-y-5 bg-[#7d3431] pt-1 max-w-7xl mx-auto px-1">
+    <div className="space-y-5 bg-red-950 p-6 min-h-screen max-w-7xl mx-auto  shadow-xl">
       
-      {/* Top Controller Bar */}
-      <div className="flex flex-col  sm:flex-row justify-between items-start sm:items-center gap-4 bg-white py-4 px-5 rounded-xl shadow-sm border border-red-200/50">
-        <div>
-          <h2 className="text-lg font-bold text-black">Foundation Directory</h2>
-          <p className="text-xs text-black/70">Manage and track all foundation initiatives.</p>
-        </div>
-        <button 
-          onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#7d3431] to-[#cb8c89] text-white font-medium text-sm rounded-xl hover:shadow-lg hover:shadow-[#7d3431]/20 transition-all duration-300"
-        >
-          <Plus className="w-4 h-4" /> Add New Foundation
-        </button>
-      </div>
+      {/* Integrated Title / Control Section */}
+      <div className="bg-white rounded-xl border p-4 border-red-100 shadow-md overflow-hidden flex flex-col justify-between">
+        
+        {/* Table Header with Search and Integrated Add Button */}
+       <div className="mb-4 flex justify-end">
+  <div className="flex items-center gap-3">
+    <div className="relative w-80">
+      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/40" />
+      <input
+        type="text"
+        placeholder="Search certificates..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="w-full pl-10 pr-4 py-2 border text-black border-red-200 rounded-lg"
+      />
+    </div>
 
-      {/* Table */}
-      <div className="bg-white rounded-xl border border-red-200/50 shadow-sm overflow-hidden flex flex-col justify-between">
-        {/* Table Header with Search */}
-        <div className="p-4 border-b border-red-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <div className="relative flex-1 max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/50" />
-            <input
-              type="text"
-              placeholder="Search foundations..."
-              className="w-full pl-10 pr-4 py-2 border border-red-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7d3431]/20 focus:border-[#7d3431] text-sm text-black"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-          <div className="text-sm text-black/70">
-            Showing {filteredFoundations.length} foundations
-          </div>
-        </div>
+    <button
+      onClick={() => setIsModalOpen(true)}
+      className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-600 to-red-500 text-white rounded-xl whitespace-nowrap"
+    >
+      <Plus className="w-4 h-4" />
+      Add Certificate
+    </button>
+  </div>
+</div>
 
+        {/* Table View */}
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-sm">
             <thead>
-              <tr className="bg-gradient-to-r from-[#7d3431]/5 to-[#cb8c89]/5 border-b border-red-200 text-black font-bold uppercase text-xs tracking-wider">
-                <th className="px-6 py-3.5 w-[120px]">Image</th>
-                <th className="px-6 py-3.5">Title</th>
-                <th className="px-6 py-3.5">Description</th>
-                <th className="px-6 py-3.5 w-[120px]">Status</th>
-                <th className="px-6 py-3.5 w-[160px]">Created Date</th>
-                <th className="px-6 py-3.5 w-[180px] text-right">Actions</th>
+              <tr className="bg-gradient-to-r from-red-50/50 to-rose-50/50 border-b border-red-100 text-red-900 font-bold uppercase text-xs tracking-wider">
+                <th className="px-6 py-4 w-[120px]">Image</th>
+                <th className="px-6 py-4">Title</th>
+                <th className="px-6 py-4">Description</th>
+                <th className="px-6 py-4 w-[120px]">Status</th>
+                <th className="px-6 py-4 w-[160px]">Created Date</th>
+                <th className="px-6 py-4 w-[180px] text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-red-100">
+            <tbody className="divide-y divide-red-50/60">
               {currentFoundations.length === 0 ? (
                 <tr>
-                  <td colSpan="6" className="text-center py-16 text-black/40">
-                    <Building2 className="w-10 h-10 mx-auto opacity-20 mb-2" />
-                    <p className="font-medium text-sm">No foundations found</p>
+                  <td colSpan={6} className="text-center py-16 text-slate-400">
+                    <Building2 className="w-12 h-12 mx-auto opacity-30 mb-2 text-red-500" />
+                    <p className="font-semibold text-sm">No foundations found matching search</p>
                   </td>
                 </tr>
               ) : (
                 currentFoundations.map((foundation) => (
-                  <tr key={foundation.id} className="hover:bg-[#7d3431]/5 transition-colors">
-                    <td className="px-6 py-3">
-                      <div className="w-16 h-16 rounded-lg bg-slate-100 overflow-hidden border border-red-200 shadow-sm">
+                  <tr key={foundation.id} className="hover:bg-red-50/20 transition-colors">
+                    <td className="px-6 py-3.5">
+                      <div className="w-16 h-16 rounded-lg bg-slate-50 overflow-hidden border border-red-100 shadow-xs">
                         <img src={foundation.imageUrl} alt={foundation.title} className="w-full h-full object-cover" />
                       </div>
                     </td>
                     
-                    <td className="px-6 py-3">
-                      <span className="font-semibold text-black block max-w-xs truncate">{foundation.title}</span>
+                    <td className="px-6 py-3.5">
+                      <span className="font-bold text-black block max-w-xs truncate">{foundation.title}</span>
                     </td>
 
-                    <td className="px-6 py-3">
-                      <span className="text-black/70 block max-w-sm">
-                        {truncateText( foundation.description )}
+                    <td className="px-6 py-3.5">
+                      <span className="text-black/70 block max-w-sm leading-relaxed">
+                        {truncateText(foundation.description)}
                       </span>
                     </td>
 
-                    <td className="px-6 py-3">
-                      <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${getStatusColor(foundation.status)}`}>
+                    <td className="px-6 py-3.5">
+                      <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold border ${getStatusColor(foundation.status)}`}>
                         <span className={`w-1.5 h-1.5 rounded-full mr-1.5 
-                          ${foundation.status === 'Active' ? 'bg-emerald-500' : ''}
-                          ${foundation.status === 'Inactive' ? 'bg-amber-500' : ''}
+                          ${foundation.status === 'Active' ? 'bg-emerald-500' : 'bg-amber-500'}
                         `} />
                         {foundation.status}
                       </span>
                     </td>
 
-                    <td className="px-6 py-3 text-black/70 font-medium">
+                    <td className="px-6 py-3.5 text-black/60 font-medium">
                       {foundation.createdAt}
                     </td>
 
-                    <td className="px-6 py-3 text-right">
-                      <div className="flex justify-end gap-1.5">
+                    <td className="px-6 py-3.5 text-right">
+                      <div className="flex justify-end gap-1">
                         <button 
                           onClick={() => handleView(foundation)}
-                          title="View" 
-                          className="p-2 text-black/50 rounded-lg hover:text-[#7d3431] hover:bg-[#7d3431]/10 transition-all duration-200"
+                          title="View Details" 
+                          className="p-2 text-red-400 rounded-lg hover:text-red-600 hover:bg-red-50 transition-all duration-200"
                         >
                           <Eye className="w-4 h-4" />
                         </button>
                         <button 
                           onClick={() => handleEdit(foundation)}
                           title="Edit" 
-                          className="p-2 text-black/50 rounded-lg hover:text-[#a55d5b] hover:bg-[#a55d5b]/10 transition-all duration-200"
+                          className="p-2 text-rose-400 rounded-lg hover:text-rose-600 hover:bg-rose-50 transition-all duration-200"
                         >
                           <Edit2 className="w-4 h-4" />
                         </button>
                         <button 
                           onClick={() => handleDelete(foundation.id)}
                           title="Delete" 
-                          className="p-2 text-black/50 rounded-lg hover:text-red-600 hover:bg-red-50 transition-all duration-200"
+                          className="p-2 text-slate-400 rounded-lg hover:text-red-600 hover:bg-red-50 transition-all duration-200"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -362,22 +361,22 @@ export default function FoundationPage() {
           </table>
         </div>
 
-        {/* Pagination */}
+        {/* Pagination Controls */}
         {filteredFoundations.length > 0 && (
-          <div className="px-6 py-3.5 border-t border-red-100 flex flex-col sm:flex-row justify-between items-center gap-4 bg-[#7d3431]/5">
+          <div className="px-6 py-4 border-t border-red-50 flex flex-col sm:flex-row justify-between items-center gap-4 bg-gradient-to-r from-red-50/10 to-rose-50/10">
             <span className="font-medium text-black/70 text-sm">
-              Showing <span className="text-black font-semibold">{indexOfFirstItem + 1}</span> to{' '}
-              <span className="text-black font-semibold">
+              Showing <span className="text-red-600 font-bold">{indexOfFirstItem + 1}</span> to{' '}
+              <span className="text-red-600 font-bold">
                 {indexOfLastItem > filteredFoundations.length ? filteredFoundations.length : indexOfLastItem}
               </span>{' '}
-              of <span className="text-black font-semibold">{filteredFoundations.length}</span> entries
+              of <span className="text-red-600 font-bold">{filteredFoundations.length}</span> records
             </span>
 
             <div className="flex items-center gap-1.5">
               <button
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
-                className="p-1.5 rounded-lg border border-red-200 bg-white text-black/60 hover:bg-[#7d3431]/10 hover:border-[#7d3431] disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
+                className="p-2 rounded-lg border border-red-100 bg-white text-red-600/60 hover:bg-red-50 hover:border-red-300 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
@@ -391,8 +390,8 @@ export default function FoundationPage() {
                     onClick={() => handlePageChange(pageNum)}
                     className={`w-8 h-8 rounded-lg text-xs font-bold transition-all duration-200 ${
                       isSelected
-                        ? 'bg-gradient-to-r from-[#7d3431] to-[#cb8c89] text-white shadow-md shadow-[#7d3431]/20'
-                        : 'bg-white border border-red-200 text-black hover:bg-[#7d3431]/10 hover:border-[#7d3431]'
+                        ? 'bg-gradient-to-r from-red-600 to-rose-600 text-white shadow-md shadow-red-600/20'
+                        : 'bg-white border border-red-100 text-black hover:bg-red-50 hover:border-red-300'
                     }`}
                   >
                     {pageNum}
@@ -403,7 +402,7 @@ export default function FoundationPage() {
               <button
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
-                className="p-1.5 rounded-lg border border-red-200 bg-white text-black/60 hover:bg-[#7d3431]/10 hover:border-[#7d3431] disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
+                className="p-2 rounded-lg border border-red-100 bg-white text-red-600/60 hover:bg-red-50 hover:border-red-300 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -412,17 +411,17 @@ export default function FoundationPage() {
         )}
       </div>
 
-      {/* Add/Edit Modal */}
+      {/* Dynamic Add/Edit Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl w-full max-w-md p-6 shadow-xl border border-red-200">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-bold text-black">
-                {editingId ? 'Edit Foundation' : 'Add New Foundation'}
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl w-full max-w-md p-6 shadow-2xl border border-red-50">
+            <div className="flex justify-between items-center mb-5 pb-2 border-b border-red-50">
+              <h3 className="text-lg font-bold text-red-900">
+                {editingId ? 'Edit Foundation Details' : 'Create New Foundation'}
               </h3>
               <button 
                 onClick={closeModal} 
-                className="p-2 rounded-lg text-black/40 hover:bg-[#7d3431]/10 hover:text-[#7d3431] transition-all duration-200"
+                className="p-1.5 rounded-lg text-black/40 hover:bg-red-50 hover:text-red-600 transition-all"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -430,11 +429,11 @@ export default function FoundationPage() {
 
             <form onSubmit={editingId ? handleUpdateFoundation : handleCreateFoundation} className="space-y-4 text-sm">
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-black mb-1.5">
+                <label className="block text-xs font-bold uppercase tracking-wider text-red-600 mb-1.5">
                   Foundation Image *
                 </label>
                 {previewUrl ? (
-                  <div className="relative w-full h-40 rounded-lg overflow-hidden border-2 border-[#7d3431]/20">
+                  <div className="relative w-full h-40 rounded-lg overflow-hidden border border-red-100 shadow-inner">
                     <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
                     <button
                       type="button"
@@ -442,23 +441,23 @@ export default function FoundationPage() {
                         setPreviewUrl('');
                         setImage(null);
                       }}
-                      className="absolute top-2 right-2 p-1.5 bg-gradient-to-r from-[#7d3431] to-[#cb8c89] text-white rounded-full shadow-lg hover:shadow-[#7d3431]/30 transition-all"
+                      className="absolute top-2 right-2 p-1.5 bg-gradient-to-r from-red-600 to-rose-600 text-white rounded-full shadow-md hover:brightness-110 transition-all"
                     >
                       <X className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 ) : (
-                  <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-[#7d3431]/30 rounded-lg cursor-pointer hover:bg-[#7d3431]/5 transition-all duration-200 hover:border-[#7d3431]">
-                    <Upload className="w-8 h-8 text-[#7d3431]/50 mb-2" />
-                    <span className="text-sm font-medium text-black">Click to upload image</span>
-                    <span className="text-xs text-black/50 mt-1">PNG, JPG, GIF up to 5MB</span>
+                  <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-red-200 rounded-lg cursor-pointer hover:bg-red-50/50 transition-all duration-200 hover:border-red-400">
+                    <Upload className="w-8 h-8 text-red-400 mb-2" />
+                    <span className="text-sm font-semibold text-black">Click to upload image</span>
+                    <span className="text-xs text-black/40 mt-1">PNG, JPG, JPEG up to 5MB</span>
                     <input type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
                   </label>
                 )}
               </div>
 
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-black mb-1.5">
+                <label className="block text-xs font-bold uppercase tracking-wider text-red-600 mb-1.5">
                   Foundation Title *
                 </label>
                 <input 
@@ -466,52 +465,52 @@ export default function FoundationPage() {
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="e.g. Green Earth Foundation"
-                  className="w-full px-3.5 py-2.5 rounded-lg border border-[#7d3431]/20 text-sm text-black focus:outline-none focus:border-[#7d3431] focus:ring-2 focus:ring-[#7d3431]/20 transition-all"
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-red-200 text-sm text-black focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all bg-white"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-black mb-1.5">
+                <label className="block text-xs font-bold uppercase tracking-wider text-red-600 mb-1.5">
                   Description *
                 </label>
                 <textarea 
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Describe the foundation's mission and work..."
-                  rows="3"
-                  className="w-full px-3.5 py-2.5 rounded-lg border border-[#7d3431]/20 text-sm text-black focus:outline-none focus:border-[#7d3431] focus:ring-2 focus:ring-[#7d3431]/20 transition-all resize-none"
+                  rows={3}
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-red-200 text-sm text-black focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all resize-none bg-white"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-black mb-1.5">
+                <label className="block text-xs font-bold uppercase tracking-wider text-red-600 mb-1.5">
                   Status
                 </label>
                 <select
                   value={status}
                   onChange={(e) => setStatus(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-lg border border-[#7d3431]/20 text-sm text-black focus:outline-none focus:border-[#7d3431] focus:ring-2 focus:ring-[#7d3431]/20 transition-all"
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-red-200 text-sm text-black focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all bg-white"
                 >
                   <option value="Active">Active</option>
                   <option value="Inactive">Inactive</option>
                 </select>
               </div>
 
-              <div className="flex gap-2.5 pt-2">
+              <div className="flex gap-3 pt-3 border-t border-red-50">
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="flex-1 py-2.5 border border-[#7d3431]/20 rounded-lg font-semibold text-black/70 hover:bg-[#7d3431]/5 transition-all duration-200"
+                  className="flex-1 py-2.5 border border-red-200 rounded-lg font-bold text-slate-600 hover:bg-slate-50 transition-all duration-200"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2.5 bg-gradient-to-r from-[#7d3431] to-[#cb8c89] text-white rounded-lg font-semibold hover:shadow-lg hover:shadow-[#7d3431]/20 transition-all duration-300"
+                  className="flex-1 py-2.5 bg-gradient-to-r from-red-600 to-rose-600 text-white rounded-lg font-bold hover:shadow-lg hover:shadow-red-600/20 hover:brightness-110 transition-all duration-300"
                 >
-                  {editingId ? 'Update Foundation' : 'Save Changes'}
+                  {editingId ? 'Update Foundation' : 'Save Foundation'}
                 </button>
               </div>
             </form>
@@ -519,51 +518,50 @@ export default function FoundationPage() {
         </div>
       )}
 
-      {/* View Modal */}
+      {/* Detail View Modal */}
       {isViewModalOpen && viewingFoundation && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl w-full max-w-lg p-6 shadow-xl border border-red-200">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-bold text-black">Foundation Details</h3>
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl w-full max-w-lg p-6 shadow-2xl border border-red-50">
+            <div className="flex justify-between items-center mb-4 pb-2 border-b border-red-50">
+              <h3 className="text-lg font-bold text-red-900">Foundation File Details</h3>
               <button 
                 onClick={() => {
                   setIsViewModalOpen(false);
                   setViewingFoundation(null);
                 }}
-                className="p-2 rounded-lg text-black/40 hover:bg-[#7d3431]/10 hover:text-[#7d3431] transition-all duration-200"
+                className="p-1.5 rounded-lg text-black/40 hover:bg-red-50 hover:text-red-600 transition-all"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <div className="space-y-4">
-              <div className="w-full h-48 rounded-lg overflow-hidden border-2 border-[#7d3431]/20">
+              <div className="w-full h-52 rounded-lg overflow-hidden border border-red-100 shadow-sm">
                 <img src={viewingFoundation.imageUrl} alt={viewingFoundation.title} className="w-full h-full object-cover" />
               </div>
               
-              <div className="space-y-3">
+              <div className="space-y-3.5 bg-red-50/30 p-4 rounded-xl border border-red-50">
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-wider text-black">Title</p>
-                  <p className="text-sm font-semibold text-black">{viewingFoundation.title}</p>
+                  <p className="text-xs font-bold uppercase tracking-wider text-red-500">Foundation Name</p>
+                  <p className="text-base font-bold text-black mt-0.5">{viewingFoundation.title}</p>
                 </div>
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-wider text-black">Description</p>
-                  <p className="text-sm text-black/80">{viewingFoundation.description}</p>
+                  <p className="text-xs font-bold uppercase tracking-wider text-red-500">Mission & Profile</p>
+                  <p className="text-sm text-black/80 mt-0.5 leading-relaxed">{viewingFoundation.description}</p>
                 </div>
-                <div className="flex gap-4">
-                  <div className="flex-1">
-                    <p className="text-xs font-bold uppercase tracking-wider text-black">Status</p>
-                    <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border mt-1 ${getStatusColor(viewingFoundation.status)}`}>
+                <div className="grid grid-cols-2 gap-4 pt-1">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-wider text-red-500">Current Status</p>
+                    <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold border mt-1.5 ${getStatusColor(viewingFoundation.status)}`}>
                       <span className={`w-1.5 h-1.5 rounded-full mr-1.5 
-                        ${viewingFoundation.status === 'Active' ? 'bg-emerald-500' : ''}
-                        ${viewingFoundation.status === 'Inactive' ? 'bg-amber-500' : ''}
+                        ${viewingFoundation.status === 'Active' ? 'bg-emerald-500' : 'bg-amber-500'}
                       `} />
                       {viewingFoundation.status}
                     </span>
                   </div>
-                  <div className="flex-1">
-                    <p className="text-xs font-bold uppercase tracking-wider text-black">Created Date</p>
-                    <p className="text-sm font-medium text-black">{viewingFoundation.createdAt}</p>
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-wider text-red-500">Registered Date</p>
+                    <p className="text-sm font-semibold text-black mt-1.5">{viewingFoundation.createdAt}</p>
                   </div>
                 </div>
               </div>
@@ -573,9 +571,9 @@ export default function FoundationPage() {
                   setIsViewModalOpen(false);
                   setViewingFoundation(null);
                 }}
-                className="w-full py-2.5 bg-gradient-to-r from-[#7d3431] to-[#cb8c89] text-white rounded-lg font-semibold hover:shadow-lg hover:shadow-[#7d3431]/20 transition-all duration-300"
+                className="w-full py-2.5 bg-gradient-to-r from-red-600 to-rose-600 text-white rounded-lg font-bold hover:shadow-lg hover:shadow-red-600/20 hover:brightness-110 transition-all duration-300"
               >
-                Close
+                Back to List
               </button>
             </div>
           </div>

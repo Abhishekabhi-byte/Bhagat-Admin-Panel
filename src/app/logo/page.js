@@ -1,9 +1,9 @@
-// app/projects/page.js
+// app/logo/page.js
 'use client';
 
 import React, { useState, useEffect } from 'react';
 import { 
-  FolderKanban, 
+  Image as ImageIcon, 
   Eye, 
   Edit2, 
   Trash2, 
@@ -13,67 +13,46 @@ import {
   ChevronLeft, 
   ChevronRight,
   Search,
-  Calendar,
-  User
+  Building2
 } from 'lucide-react';
 
-export default function ProjectsPage() {
-  const [projects, setProjects] = useState([
+export default function LogoPage() {
+  const [logos, setLogos] = useState([
     { 
       id: 1, 
-      title: 'E-Commerce Website Redesign', 
-      description: 'Complete redesign of the e-commerce platform ',
+      title: 'Company Main Logo', 
       imageUrl: 'https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=250',
-      createdAt: '2026-07-01',
-      status: 'In Progress'
+      createdAt: '2026-07-01'
     },
     { 
       id: 2, 
-      title: 'Mobile App Development', 
-      description: 'Cross-platform mobile application for fitness tracking with real-time analytics.',
+      title: '', 
       imageUrl: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=250',
-      createdAt: '2026-07-05',
-      status: 'Completed'
+      createdAt: '2026-07-05'
     },
     { 
       id: 3, 
-      title: 'Brand Identity Design', 
-      description: 'Complete brand identity including logo, color palette, typography, and brand guidelines.',
+      title: 'Brand Icon', 
       imageUrl: 'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=250',
-      createdAt: '2026-07-06',
-      status: 'Planning'
+      createdAt: '2026-07-06'
     },
     { 
       id: 4, 
-      title: 'AI Chatbot Development', 
-      description: 'Intelligent chatbot powered by AI for customer support automation.',
+      title: 'Secondary Logo', 
       imageUrl: 'https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=250',
-      createdAt: '2026-07-07',
-      status: 'In Progress'
+      createdAt: '2026-07-07'
     },
     { 
       id: 5, 
-      title: 'Data Analytics Dashboard', 
-      description: 'Real-time data analytics dashboard with interactive charts and reports.',
+      title: '', 
       imageUrl: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=250',
-      createdAt: '2026-07-08',
-      status: 'Completed'
+      createdAt: '2026-07-08'
     },
     { 
       id: 6, 
-      title: 'Cloud Migration Project', 
-      description: 'Migration of on-premise infrastructure to cloud with zero downtime.',
+      title: 'Partner Logo', 
       imageUrl: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=250',
-      createdAt: '2026-07-09',
-      status: 'Planning'
-    },
-    { 
-      id: 7, 
-      title: 'Marketing Campaign Website', 
-      description: 'Landing page for digital marketing campaign with lead generation forms.',
-      imageUrl: 'https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=250',
-      createdAt: '2026-07-10',
-      status: 'In Progress'
+      createdAt: '2026-07-09'
     },
   ]);
 
@@ -82,25 +61,22 @@ export default function ProjectsPage() {
   const itemsPerPage = 5;
 
   const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
   const [image, setImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState('');
-  const [status, setStatus] = useState('Planning');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
-  const [viewingProject, setViewingProject] = useState(null);
+  const [viewingLogo, setViewingLogo] = useState(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
 
-  // Filter projects based on search
-  const filteredProjects = projects.filter(project =>
-    project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    project.description.toLowerCase().includes(searchTerm.toLowerCase())
+  // Filter logos based on search
+  const filteredLogos = logos.filter(logo =>
+    logo.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const totalPages = Math.ceil(filteredProjects.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredLogos.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentProjects = filteredProjects.slice(indexOfFirstItem, indexOfLastItem);
+  const currentLogos = filteredLogos.slice(indexOfFirstItem, indexOfLastItem);
 
   // Reset to page 1 when search changes
   useEffect(() => {
@@ -109,12 +85,12 @@ export default function ProjectsPage() {
 
   // Ensure current page is always valid after filter changes
   useEffect(() => {
-    if (filteredProjects.length === 0) {
+    if (filteredLogos.length === 0) {
       setCurrentPage(1);
     } else if (currentPage > totalPages) {
       setCurrentPage(totalPages);
     }
-  }, [filteredProjects.length, totalPages]);
+  }, [filteredLogos.length, totalPages]);
 
   const handlePageChange = (pageNumber) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
@@ -130,95 +106,68 @@ export default function ProjectsPage() {
     }
   };
 
-  const handleCreateProject = (e) => {
+  const handleCreateLogo = (e) => {
     e.preventDefault();
     if (!previewUrl) return alert('Please select an image.');
-    if (!title.trim()) return alert('Please enter a project title.');
 
-    const newProject = {
+    const newLogo = {
       id: Date.now(),
       title: title.trim(),
-      description: description.trim(),
       imageUrl: previewUrl,
-      status: status,
       createdAt: new Date().toISOString().split('T')[0]
     };
 
-    setProjects([newProject, ...projects]);
+    setLogos([newLogo, ...logos]);
     setCurrentPage(1);
-    resetForm();
+    setTitle('');
+    setImage(null);
+    setPreviewUrl('');
     setIsModalOpen(false);
   };
 
-  const handleEdit = (project) => {
-    setEditingId(project.id);
-    setTitle(project.title);
-    setDescription(project.description);
-    setPreviewUrl(project.imageUrl);
-    setStatus(project.status);
+  const handleEdit = (logo) => {
+    setEditingId(logo.id);
+    setTitle(logo.title);
+    setPreviewUrl(logo.imageUrl);
     setIsModalOpen(true);
   };
 
-  const handleUpdateProject = (e) => {
+  const handleUpdateLogo = (e) => {
     e.preventDefault();
     if (!previewUrl) return alert('Please select an image.');
-    if (!title.trim()) return alert('Please enter a project title.');
 
-    const updatedProjects = projects.map(project =>
-      project.id === editingId
-        ? { 
-            ...project, 
-            title: title.trim(), 
-            description: description.trim(),
-            imageUrl: previewUrl,
-            status: status
-          }
-        : project
+    const updatedLogos = logos.map(logo =>
+      logo.id === editingId
+        ? { ...logo, title: title.trim(), imageUrl: previewUrl }
+        : logo
     );
 
-    setProjects(updatedProjects);
-    resetForm();
+    setLogos(updatedLogos);
+    setTitle('');
+    setImage(null);
+    setPreviewUrl('');
     setIsModalOpen(false);
     setEditingId(null);
   };
 
   const handleDelete = (id) => {
-    if (confirm('Are you sure you want to delete this project?')) {
-      const updatedProjects = projects.filter(project => project.id !== id);
-      setProjects(updatedProjects);
+    if (confirm('Are you sure you want to delete this logo?')) {
+      const updatedLogos = logos.filter(logo => logo.id !== id);
+      setLogos(updatedLogos);
     }
   };
 
-  const handleView = (project) => {
-    setViewingProject(project);
+  const handleView = (logo) => {
+    setViewingLogo(logo);
     setIsViewModalOpen(true);
-  };
-
-  const resetForm = () => {
-    setTitle('');
-    setDescription('');
-    setImage(null);
-    setPreviewUrl('');
-    setStatus('Planning');
-    setEditingId(null);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
-    resetForm();
-  };
-
-  const getStatusColor = (status) => {
-    switch(status) {
-      case 'In Progress':
-        return 'bg-blue-100 text-blue-700 border-blue-200';
-      case 'Completed':
-        return 'bg-emerald-100 text-emerald-700 border-emerald-200';
-      case 'Planning':
-        return 'bg-amber-100 text-amber-700 border-amber-200';
-      default:
-        return 'bg-gray-100 text-gray-700 border-gray-200';
-    }
+    setTitle('');
+    setImage(null);
+    setPreviewUrl('');
+    setEditingId(null);
   };
 
   return (
@@ -234,7 +183,7 @@ export default function ProjectsPage() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7d3431]/60" />
               <input
                 type="text"
-                placeholder="Search projects..."
+                placeholder="Search logos..."
                 className="w-full pl-10 pr-4 py-2 border border-[#cb8c89]/40 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7d3431]/20 focus:border-[#7d3431] text-sm text-black bg-white"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -244,11 +193,11 @@ export default function ProjectsPage() {
               onClick={() => setIsModalOpen(true)}
               className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#7d3431] to-[#cb8c89] text-white font-semibold text-sm rounded-xl hover:shadow-lg hover:shadow-[#7d3431]/30 hover:brightness-110 transition-all duration-300 shrink-0"
             >
-              <Plus className="w-4 h-4" /> Add New Project
+              <Plus className="w-4 h-4" /> Add New Logo
             </button>
           </div>
           <div className="text-sm font-medium text-[#7d3431]">
-            Total: <span className="font-bold">{filteredProjects.length}</span> Projects
+            Total: <span className="font-bold">{filteredLogos.length}</span> Logos
           </div>
         </div>
 
@@ -257,72 +206,61 @@ export default function ProjectsPage() {
           <table className="w-full text-left border-collapse text-sm">
             <thead>
               <tr className="bg-gradient-to-r from-[#7d3431]/10 to-[#cb8c89]/10 border-b border-[#cb8c89]/40 text-[#7d3431] font-bold uppercase text-xs tracking-wider">
-                <th className="px-6 py-4 w-[120px]">Image</th>
-                <th className="px-6 py-4">Title</th>
-                <th className="px-6 py-4">Description</th>
-                <th className="px-6 py-4 w-[120px]">Status</th>
-                <th className="px-6 py-4 w-[160px]">Created Date</th>
+                <th className="px-6 py-4 w-[100px]">Logo</th>
+                <th className="px-6 py-4 text-center">Title</th>
+                <th className="px-6 py-4 w-[160px] text-center">Created Date</th>
                 <th className="px-6 py-4 w-[180px] text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#7d3431]/10">
-              {currentProjects.length === 0 ? (
+              {currentLogos.length === 0 ? (
                 <tr>
-                  <td colSpan="6" className="text-center py-16 text-[#7d3431]/40">
-                    <FolderKanban className="w-12 h-12 mx-auto opacity-30 mb-2 text-[#7d3431]" />
-                    <p className="font-semibold text-sm">No projects found matching search</p>
+                  <td colSpan="4" className="text-center py-16 text-[#7d3431]/40">
+                    <Building2 className="w-12 h-12 mx-auto opacity-30 mb-2 text-[#7d3431]" />
+                    <p className="font-semibold text-sm">No logos found matching search</p>
                   </td>
                 </tr>
               ) : (
-                currentProjects.map((project) => (
-                  <tr key={project.id} className="hover:bg-[#7d3431]/5 transition-colors">
+                currentLogos.map((logo) => (
+                  <tr key={logo.id} className="hover:bg-[#7d3431]/5 transition-colors">
                     <td className="px-6 py-3.5">
-                      <div className="w-16 h-16 rounded-lg bg-slate-50 overflow-hidden border border-[#cb8c89]/40 shadow-xs">
-                        <img src={project.imageUrl} alt={project.title} className="w-full h-full object-cover" />
+                      <div className="w-14 h-14 rounded-lg bg-slate-50 overflow-hidden border border-[#cb8c89]/40 shadow-xs flex items-center justify-center p-1.5 mx-auto">
+                        <img src={logo.imageUrl} alt={logo.title || 'Logo'} className="w-full h-full object-contain" />
                       </div>
                     </td>
                     
-                    <td className="px-6 py-3.5">
-                      <span className="font-bold text-black block max-w-xs truncate">{project.title}</span>
+                    <td className="px-6 py-3.5 text-center">
+                      {logo.title ? (
+                        <span className="font-bold text-black block truncate">{logo.title}</span>
+                      ) : (
+                        <span className="text-xs italic text-[#7d3431] font-medium bg-[#7d3431]/5 px-2.5 py-1 rounded-md border border-[#cb8c89]/40">
+                          Untitled Logo
+                        </span>
+                      )}
                     </td>
 
-                    <td className="px-6 py-3.5">
-                      <span className="text-black/70 block max-w-sm truncate">{project.description}</span>
-                    </td>
-
-                    <td className="px-6 py-3.5">
-                      <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${getStatusColor(project.status)}`}>
-                        <span className={`w-1.5 h-1.5 rounded-full mr-1.5 
-                          ${project.status === 'In Progress' ? 'bg-blue-500' : ''}
-                          ${project.status === 'Completed' ? 'bg-emerald-500' : ''}
-                          ${project.status === 'Planning' ? 'bg-amber-500' : ''}
-                        `} />
-                        {project.status}
-                      </span>
-                    </td>
-
-                    <td className="px-6 py-3.5 text-black/60 font-medium">
-                      {project.createdAt}
+                    <td className="px-6 py-3.5 text-black/60 font-medium text-center">
+                      {logo.createdAt}
                     </td>
 
                     <td className="px-6 py-3.5 text-right">
                       <div className="flex justify-end gap-1">
                         <button 
-                          onClick={() => handleView(project)}
+                          onClick={() => handleView(logo)}
                           title="View Details" 
                           className="p-2 text-[#7d3431]/60 rounded-lg hover:text-[#7d3431] hover:bg-[#7d3431]/10 transition-all duration-200"
                         >
                           <Eye className="w-4 h-4" />
                         </button>
                         <button 
-                          onClick={() => handleEdit(project)}
+                          onClick={() => handleEdit(logo)}
                           title="Edit" 
                           className="p-2 text-[#cb8c89] rounded-lg hover:text-[#7d3431] hover:bg-[#cb8c89]/10 transition-all duration-200"
                         >
                           <Edit2 className="w-4 h-4" />
                         </button>
                         <button 
-                          onClick={() => handleDelete(project.id)}
+                          onClick={() => handleDelete(logo.id)}
                           title="Delete" 
                           className="p-2 text-black/40 rounded-lg hover:text-red-600 hover:bg-red-50 transition-all duration-200"
                         >
@@ -338,14 +276,14 @@ export default function ProjectsPage() {
         </div>
 
         {/* Pagination Controls */}
-        {filteredProjects.length > 0 && (
+        {filteredLogos.length > 0 && (
           <div className="px-6 py-4 border-t border-[#7d3431]/10 flex flex-col sm:flex-row justify-between items-center gap-4 bg-gradient-to-r from-[#7d3431]/5 to-[#cb8c89]/5">
             <span className="font-medium text-black/70 text-sm">
               Showing <span className="text-[#7d3431] font-bold">{indexOfFirstItem + 1}</span> to{' '}
               <span className="text-[#7d3431] font-bold">
-                {indexOfLastItem > filteredProjects.length ? filteredProjects.length : indexOfLastItem}
+                {Math.min(indexOfLastItem, filteredLogos.length)}
               </span>{' '}
-              of <span className="text-[#7d3431] font-bold">{filteredProjects.length}</span> records
+              of <span className="text-[#7d3431] font-bold">{filteredLogos.length}</span> records
             </span>
 
             <div className="flex items-center gap-1.5">
@@ -393,7 +331,7 @@ export default function ProjectsPage() {
           <div className="bg-white rounded-xl w-full max-w-md p-6 shadow-2xl border-2 border-[#7d3431]/20">
             <div className="flex justify-between items-center mb-5 pb-2 border-b border-[#7d3431]/10">
               <h3 className="text-lg font-bold text-[#7d3431]">
-                {editingId ? 'Edit Project Details' : 'Create New Project'}
+                {editingId ? 'Edit Logo Details' : 'Upload New Logo'}
               </h3>
               <button 
                 onClick={closeModal} 
@@ -403,14 +341,14 @@ export default function ProjectsPage() {
               </button>
             </div>
 
-            <form onSubmit={editingId ? handleUpdateProject : handleCreateProject} className="space-y-4 text-sm">
+            <form onSubmit={editingId ? handleUpdateLogo : handleCreateLogo} className="space-y-4 text-sm">
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-[#7d3431] mb-1.5">
-                  Project Image *
+                  Logo Image *
                 </label>
                 {previewUrl ? (
-                  <div className="relative w-full h-40 rounded-lg overflow-hidden border-2 border-[#7d3431]/30 shadow-inner">
-                    <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
+                  <div className="relative w-full h-40 rounded-lg overflow-hidden border-2 border-[#7d3431]/30 shadow-inner bg-slate-50 flex items-center justify-center p-4">
+                    <img src={previewUrl} alt="Preview" className="w-full h-full object-contain" />
                     <button
                       type="button"
                       onClick={() => {
@@ -425,8 +363,9 @@ export default function ProjectsPage() {
                 ) : (
                   <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-[#cb8c89] rounded-lg cursor-pointer hover:bg-[#7d3431]/5 transition-all duration-200 hover:border-[#7d3431]">
                     <Upload className="w-8 h-8 text-[#7d3431]/50 mb-2" />
-                    <span className="text-sm font-semibold text-black">Click to upload image</span>
-                    <span className="text-xs text-black/40 mt-1">PNG, JPG, JPEG up to 5MB</span>
+                    <span className="text-sm font-semibold text-black">Click to upload logo</span>
+                    <span className="text-xs text-black/40 mt-1">PNG, JPG, JPEG, SVG up to 5MB</span>
+                    <span className="text-xs text-black/30 mt-0.5">Recommended: Transparent PNG</span>
                     <input type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
                   </label>
                 )}
@@ -434,43 +373,15 @@ export default function ProjectsPage() {
 
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-[#7d3431] mb-1.5">
-                  Project Title *
+                  Logo Title (Optional)
                 </label>
                 <input 
                   type="text" 
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  placeholder="e.g. E-Commerce Website Redesign"
+                  placeholder="e.g. Company Main Logo"
                   className="w-full px-3.5 py-2.5 rounded-lg border border-[#cb8c89]/60 text-sm text-black focus:outline-none focus:border-[#7d3431] focus:ring-2 focus:ring-[#7d3431]/20 transition-all bg-white"
                 />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-[#7d3431] mb-1.5">
-                  Description
-                </label>
-                <textarea 
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Describe your project..."
-                  rows="3"
-                  className="w-full px-3.5 py-2.5 rounded-lg border border-[#cb8c89]/60 text-sm text-black focus:outline-none focus:border-[#7d3431] focus:ring-2 focus:ring-[#7d3431]/20 transition-all resize-none bg-white"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-[#7d3431] mb-1.5">
-                  Status
-                </label>
-                <select
-                  value={status}
-                  onChange={(e) => setStatus(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-lg border border-[#cb8c89]/60 text-sm text-black focus:outline-none focus:border-[#7d3431] focus:ring-2 focus:ring-[#7d3431]/20 transition-all bg-white"
-                >
-                  <option value="Planning">Planning</option>
-                  <option value="In Progress">In Progress</option>
-                  <option value="Completed">Completed</option>
-                </select>
               </div>
 
               <div className="flex gap-3 pt-3 border-t border-[#7d3431]/10">
@@ -485,7 +396,7 @@ export default function ProjectsPage() {
                   type="submit"
                   className="flex-1 py-2.5 bg-gradient-to-r from-[#7d3431] to-[#cb8c89] text-white rounded-lg font-bold hover:shadow-lg hover:shadow-[#7d3431]/30 hover:brightness-110 transition-all duration-300"
                 >
-                  {editingId ? 'Update Project' : 'Save Project'}
+                  {editingId ? 'Update Logo' : 'Save Logo'}
                 </button>
               </div>
             </form>
@@ -494,15 +405,15 @@ export default function ProjectsPage() {
       )}
 
       {/* Detail View Modal */}
-      {isViewModalOpen && viewingProject && (
+      {isViewModalOpen && viewingLogo && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl w-full max-w-lg p-6 shadow-2xl border-2 border-[#7d3431]/20">
             <div className="flex justify-between items-center mb-4 pb-2 border-b border-[#7d3431]/10">
-              <h3 className="text-lg font-bold text-[#7d3431]">Project Details</h3>
+              <h3 className="text-lg font-bold text-[#7d3431]">Logo Details</h3>
               <button 
                 onClick={() => {
                   setIsViewModalOpen(false);
-                  setViewingProject(null);
+                  setViewingLogo(null);
                 }}
                 className="p-1.5 rounded-lg text-black/40 hover:bg-[#7d3431]/10 hover:text-[#7d3431] transition-all"
               >
@@ -511,46 +422,31 @@ export default function ProjectsPage() {
             </div>
 
             <div className="space-y-4">
-              <div className="w-full h-52 rounded-lg overflow-hidden border-2 border-[#cb8c89]/40 shadow-sm">
-                <img src={viewingProject.imageUrl} alt={viewingProject.title} className="w-full h-full object-cover" />
+              <div className="w-full h-56 rounded-lg overflow-hidden border-2 border-[#cb8c89]/40 shadow-sm bg-slate-50 flex items-center justify-center p-6">
+                <img src={viewingLogo.imageUrl} alt={viewingLogo.title || 'Logo'} className="w-full h-full object-contain" />
               </div>
               
               <div className="space-y-3.5 bg-[#7d3431]/5 p-4 rounded-xl border border-[#cb8c89]/20">
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-wider text-[#7d3431]">Project Title</p>
-                  <p className="text-base font-bold text-black mt-0.5">{viewingProject.title}</p>
+                  <p className="text-xs font-bold uppercase tracking-wider text-[#7d3431]">Logo Title</p>
+                  <p className="text-base font-bold text-black mt-0.5">
+                    {viewingLogo.title || <span className="text-black/40 italic">Untitled Logo</span>}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-wider text-[#7d3431]">Description</p>
-                  <p className="text-sm text-black/80 mt-0.5 leading-relaxed">{viewingProject.description}</p>
-                </div>
-                <div className="grid grid-cols-2 gap-4 pt-1">
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-wider text-[#7d3431]">Status</p>
-                    <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold border mt-1.5 ${getStatusColor(viewingProject.status)}`}>
-                      <span className={`w-1.5 h-1.5 rounded-full mr-1.5 
-                        ${viewingProject.status === 'In Progress' ? 'bg-blue-500' : ''}
-                        ${viewingProject.status === 'Completed' ? 'bg-emerald-500' : ''}
-                        ${viewingProject.status === 'Planning' ? 'bg-amber-500' : ''}
-                      `} />
-                      {viewingProject.status}
-                    </span>
-                  </div>
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-wider text-[#7d3431]">Created Date</p>
-                    <p className="text-sm font-semibold text-black mt-1.5">{viewingProject.createdAt}</p>
-                  </div>
+                  <p className="text-xs font-bold uppercase tracking-wider text-[#7d3431]">Uploaded Date</p>
+                  <p className="text-sm font-semibold text-black mt-1.5">{viewingLogo.createdAt}</p>
                 </div>
               </div>
 
               <button
                 onClick={() => {
                   setIsViewModalOpen(false);
-                  setViewingProject(null);
+                  setViewingLogo(null);
                 }}
                 className="w-full py-2.5 bg-gradient-to-r from-[#7d3431] to-[#cb8c89] text-white rounded-lg font-bold hover:shadow-lg hover:shadow-[#7d3431]/30 hover:brightness-110 transition-all duration-300"
               >
-                Back to List
+                Close View
               </button>
             </div>
           </div>

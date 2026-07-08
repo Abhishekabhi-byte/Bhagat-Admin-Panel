@@ -1,9 +1,8 @@
-// app/banner/page.js
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
-  Image, 
+  Image as ImageIcon, 
   Eye, 
   Edit2, 
   Trash2, 
@@ -48,7 +47,7 @@ export default function BannerPage() {
   const currentBanners = filteredBanners.slice(indexOfFirstItem, indexOfLastItem);
 
   // Reset to page 1 when search changes
-  React.useEffect(() => {
+  useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm]);
 
@@ -135,48 +134,46 @@ export default function BannerPage() {
   };
 
   return (
-    <div className="space-y-5 max-w-7xl mx-auto bg-[#7d3431] py-1 px-1">
+    <div className="space-y-5 max-w-7xl mx-auto bg-red-50/40 py-6 px-6 min-h-screen transition-all">
       
-      {/* Top Controller Bar */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white py-4 px-5 rounded-xl shadow-sm border border-red-200/50">
-        <div>
-          <h2 className="text-lg font-bold text-black">Banners Directory</h2>
-          <p className="text-xs text-black/70">Upload and manage promotional content banners.</p>
-        </div>
-        <button 
-          onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#7d3431] to-[#cb8c89] text-white font-medium text-sm rounded-xl hover:shadow-lg hover:shadow-[#7d3431]/20 transition-all duration-300"
-        >
-          <Plus className="w-4 h-4" /> Add New Banner
-        </button>
-      </div>
+      {/* Table Card wrapper */}
+      <div className="bg-white rounded-xl border border-red-200/60 shadow-sm overflow-hidden flex flex-col justify-between">
+        
+        {/* Table Header with Search and Add Button inline */}
+        <div className="p-4 border-b border-red-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white">
+          
+          {/* Left Side: Search Bar & Add Button Side-by-Side */}
+       <div className="flex justify-end w-full">
+  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 max-w-xl w-full sm:w-auto">
+    <div className="relative sm:w-80">
+      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/40" />
+      <input
+        type="text"
+        placeholder="Search banners..."
+        className="w-full pl-10 pr-4 py-2 text-black border  border-red-200 rounded-lg"
+      />
+    </div>
 
-      {/* Table */}
-      <div className="bg-white rounded-xl border border-red-200/50 shadow-sm overflow-hidden flex flex-col justify-between">
-        {/* Table Header with Search */}
-        <div className="p-4 border-b border-red-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <div className="relative flex-1 max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/50" />
-            <input
-              type="text"
-              placeholder="Search banners..."
-              className="w-full pl-10 pr-4 py-2 border border-red-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7d3431]/20 focus:border-[#7d3431] text-sm text-black"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-          <div className="text-sm text-black/70">
-            Showing {filteredBanners.length} banners
-          </div>
+    <button
+      onClick={() => setIsModalOpen(true)}
+      className="flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-red-600 to-red-500 text-white rounded-xl whitespace-nowrap"
+    >
+      <Plus className="w-4 h-4" />
+      Add New Banner
+    </button>
+  </div>
+</div>
+            
+
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-sm">
             <thead>
-              <tr className="bg-gradient-to-r from-[#7d3431]/5 to-[#cb8c89]/5 border-b border-red-200 text-black font-bold uppercase text-xs tracking-wider">
+              <tr className="bg-red-50/50 border-b border-red-200 text-red-600 font-extrabold uppercase text-xs tracking-wider">
                 <th className="px-6 py-3.5 w-[160px]">Banner Preview</th>
-                <th className="px-6 py-3.5">Banner Title</th>
-                <th className="px-6 py-3.5 w-[160px]">Created Date</th>
+                <th className="px-6 py-3.5 text-center">Banner Title</th>
+                <th className="px-6 py-3.5 w-[160px] text-center">Created Date</th>
                 <th className="px-6 py-3.5 w-[180px] text-right">Actions</th>
               </tr>
             </thead>
@@ -184,22 +181,22 @@ export default function BannerPage() {
               {currentBanners.length === 0 ? (
                 <tr>
                   <td colSpan="4" className="text-center py-16 text-black/40">
-                    <Image className="w-10 h-10 mx-auto opacity-20 mb-2" />
+                    <ImageIcon className="w-10 h-10 mx-auto opacity-20 mb-2 text-red-600" />
                     <p className="font-medium text-sm">No banners found</p>
                   </td>
                 </tr>
               ) : (
                 currentBanners.map((banner) => (
-                  <tr key={banner.id} className="hover:bg-[#7d3431]/5 transition-colors">
+                  <tr key={banner.id} className="hover:bg-red-50/40 transition-colors">
                     <td className="px-6 py-3">
-                      <div className="w-28 h-16 rounded-lg bg-slate-100 overflow-hidden border border-red-200 shadow-sm">
+                      <div className="w-28 h-16 rounded-lg bg-white overflow-hidden border border-red-200 shadow-sm">
                         <img src={banner.imageUrl} alt="Banner" className="w-full h-full object-cover" />
                       </div>
                     </td>
                     
-                    <td className="px-6 py-3">
+                    <td className="px-6 py-3 text-center">
                       {banner.title ? (
-                        <span className="font-semibold text-black block max-w-lg truncate">{banner.title}</span>
+                        <span className="font-bold text-black block">{banner.title}</span>
                       ) : (
                         <span className="text-xs italic text-black/50 bg-black/5 px-2.5 py-1 rounded-md border border-red-200">
                           Untitled Banner
@@ -207,7 +204,7 @@ export default function BannerPage() {
                       )}
                     </td>
 
-                    <td className="px-6 py-3 text-black/70 font-medium">
+                    <td className="px-6 py-3 text-black/70 font-semibold text-center">
                       {banner.createdAt}
                     </td>
 
@@ -216,21 +213,21 @@ export default function BannerPage() {
                         <button 
                           onClick={() => handleView(banner)}
                           title="View" 
-                          className="p-2 text-black/50 rounded-lg hover:text-[#7d3431] hover:bg-[#7d3431]/10 transition-all duration-200"
+                          className="p-2 text-black/40 rounded-lg hover:text-red-600 hover:bg-red-50 transition-all duration-200"
                         >
                           <Eye className="w-4 h-4" />
                         </button>
                         <button 
                           onClick={() => handleEdit(banner)}
                           title="Edit" 
-                          className="p-2 text-black/50 rounded-lg hover:text-[#a55d5b] hover:bg-[#a55d5b]/10 transition-all duration-200"
+                          className="p-2 text-black/40 rounded-lg hover:text-red-500 hover:bg-red-50 transition-all duration-200"
                         >
                           <Edit2 className="w-4 h-4" />
                         </button>
                         <button 
                           onClick={() => handleDelete(banner.id)}
                           title="Delete" 
-                          className="p-2 text-black/50 rounded-lg hover:text-red-600 hover:bg-red-50 transition-all duration-200"
+                          className="p-2 text-black/40 rounded-lg hover:text-red-700 hover:bg-red-100 transition-all duration-200"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -245,7 +242,7 @@ export default function BannerPage() {
 
         {/* Pagination */}
         {filteredBanners.length > 0 && (
-          <div className="px-6 py-3.5 border-t border-red-100 flex flex-col sm:flex-row justify-between items-center gap-4 bg-[#7d3431]/5">
+          <div className="px-6 py-3.5 border-t border-red-100 flex flex-col sm:flex-row justify-between items-center gap-4 bg-red-50/30">
             <span className="font-medium text-black/70 text-sm">
               Showing <span className="text-black font-semibold">{indexOfFirstItem + 1}</span> to{' '}
               <span className="text-black font-semibold">
@@ -258,7 +255,7 @@ export default function BannerPage() {
               <button
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
-                className="p-1.5 rounded-lg border border-red-200 bg-white text-black/60 hover:bg-[#7d3431]/10 hover:border-[#7d3431] disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
+                className="p-1.5 rounded-lg border border-red-200 bg-white text-black/60 hover:bg-red-50 hover:border-red-400 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
@@ -270,10 +267,10 @@ export default function BannerPage() {
                   <button
                     key={pageNum}
                     onClick={() => handlePageChange(pageNum)}
-                    className={`w-8 h-8 rounded-lg text-xs font-bold transition-all duration-200 ${
+                    className={`w-8 h-8 rounded-lg text-xs font-black transition-all duration-200 ${
                       isSelected
-                        ? 'bg-gradient-to-r from-[#7d3431] to-[#cb8c89] text-white shadow-md shadow-[#7d3431]/20'
-                        : 'bg-white border border-red-200 text-black hover:bg-[#7d3431]/10 hover:border-[#7d3431]'
+                        ? 'bg-gradient-to-r from-red-600 to-red-500 text-white shadow-md shadow-red-600/20'
+                        : 'bg-white border border-red-200 text-black hover:bg-red-50 hover:border-red-400'
                     }`}
                   >
                     {pageNum}
@@ -284,7 +281,7 @@ export default function BannerPage() {
               <button
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
-                className="p-1.5 rounded-lg border border-red-200 bg-white text-black/60 hover:bg-[#7d3431]/10 hover:border-[#7d3431] disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
+                className="p-1.5 rounded-lg border border-red-200 bg-white text-black/60 hover:bg-red-50 hover:border-red-400 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -295,15 +292,15 @@ export default function BannerPage() {
 
       {/* Add/Edit Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl w-full max-w-md p-6 shadow-xl border border-red-200">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={closeModal}>
+          <div className="bg-white rounded-xl w-full max-w-md p-6 shadow-xl border border-red-200" onClick={(e) => e.stopPropagation()}>
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-bold text-black">
+              <h3 className="text-lg font-black text-black">
                 {editingId ? 'Edit Banner' : 'Upload Banner'}
               </h3>
               <button 
                 onClick={closeModal} 
-                className="p-2 rounded-lg text-black/40 hover:bg-[#7d3431]/10 hover:text-[#7d3431] transition-all duration-200"
+                className="p-2 rounded-lg text-black/40 hover:bg-red-50 hover:text-red-600 transition-all duration-200"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -311,11 +308,11 @@ export default function BannerPage() {
 
             <form onSubmit={editingId ? handleUpdateBanner : handleCreateBanner} className="space-y-4 text-sm">
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-black mb-1.5">
+                <label className="block text-xs font-black uppercase tracking-wider text-red-600 mb-1.5">
                   Banner Image *
                 </label>
                 {previewUrl ? (
-                  <div className="relative w-full h-40 rounded-lg overflow-hidden border-2 border-[#7d3431]/20">
+                  <div className="relative w-full h-40 rounded-lg overflow-hidden border-2 border-red-200">
                     <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
                     <button
                       type="button"
@@ -323,15 +320,15 @@ export default function BannerPage() {
                         setPreviewUrl('');
                         setImage(null);
                       }}
-                      className="absolute top-2 right-2 p-1.5 bg-gradient-to-r from-[#7d3431] to-[#cb8c89] text-white rounded-full shadow-lg hover:shadow-[#7d3431]/30 transition-all"
+                      className="absolute top-2 right-2 p-1.5 bg-gradient-to-r from-red-600 to-red-500 text-white rounded-full shadow-lg hover:shadow-red-600/30 transition-all"
                     >
                       <X className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 ) : (
-                  <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-[#7d3431]/30 rounded-lg cursor-pointer hover:bg-[#7d3431]/5 transition-all duration-200 hover:border-[#7d3431]">
-                    <Upload className="w-8 h-8 text-[#7d3431]/50 mb-2" />
-                    <span className="text-sm font-medium text-black">Click to upload banner</span>
+                  <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-red-300 rounded-lg cursor-pointer hover:bg-red-50/50 transition-all duration-200 hover:border-red-500">
+                    <Upload className="w-8 h-8 text-red-500/60 mb-2" />
+                    <span className="text-sm font-bold text-black">Click to upload banner</span>
                     <span className="text-xs text-black/50 mt-1">PNG, JPG, GIF up to 5MB</span>
                     <input type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
                   </label>
@@ -339,7 +336,7 @@ export default function BannerPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-black mb-1.5">
+                <label className="block text-xs font-black uppercase tracking-wider text-red-600 mb-1.5">
                   Banner Title (Optional)
                 </label>
                 <input 
@@ -347,7 +344,7 @@ export default function BannerPage() {
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="e.g. Summer Special Offer"
-                  className="w-full px-3.5 py-2.5 rounded-lg border border-[#7d3431]/20 text-sm text-black focus:outline-none focus:border-[#7d3431] focus:ring-2 focus:ring-[#7d3431]/20 transition-all"
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-red-200 text-sm text-black focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all"
                 />
               </div>
 
@@ -355,13 +352,13 @@ export default function BannerPage() {
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="flex-1 py-2.5 border border-[#7d3431]/20 rounded-lg font-semibold text-black/70 hover:bg-[#7d3431]/5 transition-all duration-200"
+                  className="flex-1 py-2.5 border border-red-200 rounded-lg font-bold text-black/70 hover:bg-red-50 transition-all duration-200"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2.5 bg-gradient-to-r from-[#7d3431] to-[#cb8c89] text-white rounded-lg font-semibold hover:shadow-lg hover:shadow-[#7d3431]/20 transition-all duration-300"
+                  className="flex-1 py-2.5 bg-gradient-to-r from-red-600 to-red-500 text-white rounded-lg font-bold hover:shadow-lg hover:shadow-red-600/20 transition-all duration-200"
                 >
                   {editingId ? 'Update Banner' : 'Save Changes'}
                 </button>
@@ -373,36 +370,39 @@ export default function BannerPage() {
 
       {/* View Modal */}
       {isViewModalOpen && viewingBanner && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl w-full max-w-lg p-6 shadow-xl border border-red-200">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={() => {
+          setIsViewModalOpen(false);
+          setViewingBanner(null);
+        }}>
+          <div className="bg-white rounded-xl w-full max-w-lg p-6 shadow-xl border border-red-200" onClick={(e) => e.stopPropagation()}>
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-bold text-black">Banner Preview</h3>
+              <h3 className="text-lg font-black text-black">Banner Preview</h3>
               <button 
                 onClick={() => {
                   setIsViewModalOpen(false);
                   setViewingBanner(null);
                 }}
-                className="p-2 rounded-lg text-black/40 hover:bg-[#7d3431]/10 hover:text-[#7d3431] transition-all duration-200"
+                className="p-2 rounded-lg text-black/40 hover:bg-red-50 hover:text-red-600 transition-all duration-200"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <div className="space-y-4">
-              <div className="w-full h-56 rounded-lg overflow-hidden border-2 border-[#7d3431]/20">
+              <div className="w-full h-56 rounded-lg overflow-hidden border-2 border-red-200">
                 <img src={viewingBanner.imageUrl} alt={viewingBanner.title || 'Banner'} className="w-full h-full object-cover" />
               </div>
               
               <div className="space-y-2">
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-wider text-black">Title</p>
-                  <p className="text-sm font-medium text-black">
-                    {viewingBanner.title || <span className="text-black/50 italic">Untitled Banner</span>}
-                  </p>
+                  <p className="text-xs font-black uppercase tracking-wider text-black/50">Title</p>
+                  <div className="text-sm font-bold text-black bg-red-50/20 px-3 py-2 rounded-lg border border-red-100">
+                    {viewingBanner.title || <span className="text-black/40 italic">Untitled Banner</span>}
+                  </div>
                 </div>
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-wider text-black">Created Date</p>
-                  <p className="text-sm font-medium text-black">{viewingBanner.createdAt}</p>
+                  <p className="text-xs font-black uppercase tracking-wider text-black/50">Created Date</p>
+                  <p className="text-sm font-semibold text-black/80 bg-red-50/20 px-3 py-2 rounded-lg border border-red-100">{viewingBanner.createdAt}</p>
                 </div>
               </div>
 
@@ -411,7 +411,7 @@ export default function BannerPage() {
                   setIsViewModalOpen(false);
                   setViewingBanner(null);
                 }}
-                className="w-full py-2.5 bg-gradient-to-r from-[#7d3431] to-[#cb8c89] text-white rounded-lg font-semibold hover:shadow-lg hover:shadow-[#7d3431]/20 transition-all duration-300"
+                className="w-full py-2.5 bg-gradient-to-r from-red-600 to-red-500 text-white rounded-lg font-bold hover:shadow-lg hover:shadow-red-600/20 transition-all duration-200"
               >
                 Close
               </button>
