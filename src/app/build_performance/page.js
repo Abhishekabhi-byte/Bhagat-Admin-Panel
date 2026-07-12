@@ -17,7 +17,7 @@ import {
   User
 } from 'lucide-react';
 
-export default function ProjectsPage() {
+export default function Build_Performance() {
   const [projects, setProjects] = useState([
     { 
       id: 1, 
@@ -228,29 +228,26 @@ export default function ProjectsPage() {
       <div className="bg-white rounded-xl border border-[#cb8c89]/40 shadow-md overflow-hidden flex flex-col justify-between">
         
         {/* Table Header with Search and Integrated Add Button */}
-        <div className="p-5 border-b border-[#7d3431]/10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-gradient-to-r from-white to-[#7d3431]/5">
-          <div className="flex flex-1 items-center gap-3 w-full sm:max-w-xl">
-            <div className="relative flex-1 max-w-sm">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7d3431]/60" />
-              <input
-                type="text"
-                placeholder="Search projects..."
-                className="w-full pl-10 pr-4 py-2 border border-[#cb8c89]/40 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7d3431]/20 focus:border-[#7d3431] text-sm text-black bg-white"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-            <button 
-              onClick={() => setIsModalOpen(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#7d3431] to-[#cb8c89] text-white font-semibold text-sm rounded-xl hover:shadow-lg hover:shadow-[#7d3431]/30 hover:brightness-110 transition-all duration-300 shrink-0"
-            >
-              <Plus className="w-4 h-4" /> Add New Project
-            </button>
+           <div className="flex justify-end w-full">
+        <div className="flex flex-col sm:flex-row items-stretch p-4 sm:items-center gap-3 max-w-xl w-full sm:w-auto">
+          <div className="relative sm:w-80">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/40" />
+            <input
+              type="text"
+              placeholder="Search banners..."
+              className="w-full pl-10 pr-4 py-2 text-black border  border-red-200 rounded-lg"
+            />
           </div>
-          <div className="text-sm font-medium text-[#7d3431]">
-            Total: <span className="font-bold">{filteredProjects.length}</span> Projects
-          </div>
+      
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-red-600 to-red-500 text-white rounded-xl whitespace-nowrap"
+          >
+            <Plus className="w-4 h-4" />
+            Add  Performance
+          </button>
         </div>
+      </div>
 
         {/* Table View */}
         <div className="overflow-x-auto">

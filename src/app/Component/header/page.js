@@ -6,8 +6,8 @@ import { usePathname } from 'next/navigation';
 const sections = [
   { name: "Banner", path: "/banner" },
   { name: "Foundation", path: "/foundation" },
-  { name: "Projects", path: "/project" },
-  { name: "Client", path: "/client" },
+  { name: "Build Performance", path: "/build_performance" },
+  { name: "Client Voice", path: "/client" },
   { name: "Journey", path: "/journey" },
   { name: "Team", path: "/team" },
   { name: "Services", path: "/services" },
@@ -29,8 +29,8 @@ export default function Header() {
           {title}
         </h1>
         {currentSection && (
-          <span className="ml-2 px-2.5 py-0.5 text-xs font-semibold rounded-full bg-[#935053]/10 text-[#935053] border border-[#935053]/20">
-            Section
+          <span className="">
+            {/* Section */}
           </span>
         )}
       </div>

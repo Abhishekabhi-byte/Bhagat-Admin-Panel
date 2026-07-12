@@ -340,10 +340,10 @@ export default function JourneyPage() {
       <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/40" />
       <input
         type="text"
-        placeholder="Search certificates..."
+        placeholder="Search our journeys..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        className="w-full pl-10 pr-4 py-2 border border-red-200 rounded-lg"
+        className="w-full text-black pl-10 pr-4 py-2 border border-red-200 rounded-lg"
       />
     </div>
 
@@ -352,7 +352,7 @@ export default function JourneyPage() {
       className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-600 to-red-500 text-white rounded-xl whitespace-nowrap"
     >
       <Plus className="w-4 h-4" />
-      Add Certificate
+      Add Our Journey
     </button>
   </div>
 </div>
